@@ -1,0 +1,24 @@
+cmake_minimum_required(VERSION 3.15...3.26)
+
+project(game_of_life
+    VERSION 1.0
+    LANGUAGES CXX
+)
+
+list(APPEND CMAKE_MODULE_PATH "./cmake")
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+
+set(CMAKE_CXX_FLAGS "-O0 -Werror -Wall -Wextra")
+
+include(Doxygen)
+include(ClangFormat)
+
+set(DOXYGEN_PROJECT_NAME "Game of Life")
+doxygen_add_docs(
+    doxygen
+    ${PROJECT_SOURCE_DIR}
+    COMMENT "Generating documentation"
+)
+
+add_subdirectory(src)

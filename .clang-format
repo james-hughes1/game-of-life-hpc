@@ -1,0 +1,12 @@
+---
+BasedOnStyle: LLVM
+AlignAfterOpenBracket: true
+UseTab: Never
+IndentWidth: 4
+BreakBeforeBraces: Attach
+AllowShortIfStatementsOnASingleLine: false
+AlignConsecutiveMacros: true
+AlignConsecutiveAssignments: true
+AllowAllParametersOfDeclarationOnNextLine: true
+BinPackParameters: true
+AlignTrailingComments: true
