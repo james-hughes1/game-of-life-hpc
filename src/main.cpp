@@ -4,10 +4,15 @@
 
 #include <iostream>
 
+#include "matrix.h"
+
 int main() {
     /**
-     * New docs.
+     * Main procedure to run.
      */
-    std::cout << "This is a test." << std::endl;
+    Matrix A = matrix::generate_matrix(4, 4);
+    matrix::display_matrix(A);
+    Matrix B = matrix::count_neighbours(A);
+    matrix::display_matrix(B);
     return 0;
 }
