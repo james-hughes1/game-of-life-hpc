@@ -23,7 +23,8 @@ class World {
 };
 
 namespace conway {
-int evaluate_rules(Matrix cells_count, Matrix *cells_old, Matrix *cells_new);
+int evaluate_rules(Matrix cells_count, Matrix *cells_current,
+                   Matrix *cells_next);
 };
 
 #endif
