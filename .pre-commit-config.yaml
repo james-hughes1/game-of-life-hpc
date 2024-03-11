@@ -14,4 +14,4 @@ repos:
       - id: clang-format
         args: [-i]
       - id: clang-tidy
-        args: [-checks=clang-analyzer-*,bugprone-*,cppcoreguidelines-*,modernize-*,readability-*]
+        args: [-checks=clang-analyzer-*,bugprone-*,cppcoreguidelines-*,modernize-*,readability-*, -p=./]
