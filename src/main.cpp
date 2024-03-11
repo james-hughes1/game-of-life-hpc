@@ -12,22 +12,16 @@ int main() {
      * Main procedure to run.
      */
 
-    Matrix A = matrix::generate_matrix(5, 5);
+    Matrix A = matrix::generate_matrix(6, 10);
 
     World world(A);
 
     world.display_world();
-
-    world.evaluate_rules();
-
+    world.update_boundary();
     world.display_world();
-
     world.evaluate_rules();
-
     world.display_world();
-
-    world.evaluate_rules();
-
+    world.update_boundary();
     world.display_world();
 
     return 0;
