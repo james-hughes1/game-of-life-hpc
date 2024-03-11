@@ -12,6 +12,6 @@ repos:
     rev: v1.3.5
     hooks:
       - id: clang-format
-        args: [-i]
+        args: [-i -style=file]
       - id: clang-tidy
         args: [-p=./build]
