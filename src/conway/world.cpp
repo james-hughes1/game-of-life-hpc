@@ -28,20 +28,10 @@ int World::evaluate_rules() {
 
 int World::update_boundary() {
     // Vertices
-    Matrix *cells_current;
-    cells_current = (age % 2 == 0) ? &cells_0 : &cells_1;
-    (*cells_current)(n_rows - 1, n_cols - 1) = (*cells_current)(1, 1);
-    (*cells_current)(0, n_cols - 1)          = (*cells_current)(n_rows - 2, 1);
-    (*cells_current)(0, 0)          = (*cells_current)(n_rows - 2, n_cols - 2);
-    (*cells_current)(n_rows - 1, 0) = (*cells_current)(1, n_cols - 2);
-    // Edges
-    for (int j = 1; j < n_cols - 1; j++) {
-        (*cells_current)(0, j)          = (*cells_current)(n_rows - 2, j);
-        (*cells_current)(n_rows - 1, j) = (*cells_current)(1, j);
-    }
-    for (int i = 1; i < n_cols - 1; i++) {
-        (*cells_current)(i, 0)          = (*cells_current)(i, n_cols - 2);
-        (*cells_current)(i, n_rows - 1) = (*cells_current)(i, 1);
+    if (age % 2 == 0) {
+        conway::update_boundary(cells_0);
+    } else {
+        conway::update_boundary(cells_1);
     }
     return 0;
 }
@@ -76,6 +66,28 @@ int conway::evaluate_rules(Matrix cells_count, Matrix &cells_current,
                 }
             }
         }
+    }
+    return 0;
+}
+
+int conway::update_boundary(Matrix &cells_current) {
+    // Vertices
+    cells_current(cells_current.n_rows - 1, cells_current.n_cols - 1) =
+        cells_current(1, 1);
+    cells_current(0, cells_current.n_cols - 1) =
+        cells_current(cells_current.n_rows - 2, 1);
+    cells_current(0, 0) =
+        cells_current(cells_current.n_rows - 2, cells_current.n_cols - 2);
+    cells_current(cells_current.n_rows - 1, 0) =
+        cells_current(1, cells_current.n_cols - 2);
+    // Edges
+    for (int j = 1; j < cells_current.n_cols - 1; j++) {
+        cells_current(0, j) = cells_current(cells_current.n_rows - 2, j);
+        cells_current(cells_current.n_rows - 1, j) = cells_current(1, j);
+    }
+    for (int i = 1; i < cells_current.n_cols - 1; i++) {
+        cells_current(i, 0) = cells_current(i, cells_current.n_cols - 2);
+        cells_current(i, cells_current.n_rows - 1) = cells_current(i, 1);
     }
     return 0;
 }

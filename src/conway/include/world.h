@@ -25,6 +25,7 @@ class World {
 namespace conway {
 int evaluate_rules(Matrix cells_count, Matrix &cells_current,
                    Matrix &cells_next);
-};
+int update_boundary(Matrix &cells);
+}; // namespace conway
 
 #endif
