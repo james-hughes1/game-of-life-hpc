@@ -15,13 +15,13 @@ World::World(Matrix seed) : cells_0(seed), cells_1(seed.n_rows, seed.n_cols) {
 }
 
 int World::evaluate_rules() {
-    Matrix cells_count = (age % 2 == 0) ? matrix::count_neighbours(cells_0)
-                                        : matrix::count_neighbours(cells_1);
-    Matrix *cells_current;
-    Matrix *cells_next;
-    cells_current = (age % 2 == 0) ? &cells_0 : &cells_1;
-    cells_next    = (age % 2 == 0) ? &cells_1 : &cells_0;
-    conway::evaluate_rules(cells_count, cells_current, cells_next);
+    if (age % 2 == 0) {
+        Matrix cells_count = matrix::count_neighbours(cells_0);
+        conway::evaluate_rules(cells_count, cells_0, cells_1);
+    } else {
+        Matrix cells_count = matrix::count_neighbours(cells_1);
+        conway::evaluate_rules(cells_count, cells_1, cells_0);
+    }
     age += 1;
     return 0;
 }
@@ -58,21 +58,21 @@ int World::display_world() {
     return 0;
 }
 
-int conway::evaluate_rules(Matrix cells_count, Matrix *cells_current,
-                           Matrix *cells_next) {
+int conway::evaluate_rules(Matrix cells_count, Matrix &cells_current,
+                           Matrix &cells_next) {
     for (int i = 1; i < cells_count.n_rows - 1; i++) {
         for (int j = 1; j < cells_count.n_cols - 1; j++) {
-            if ((*cells_current)(i, j) == 1) {
+            if (cells_current(i, j) == 1) {
                 if (cells_count(i, j) != 2 and cells_count(i, j) != 3) {
-                    (*cells_next)(i, j) = 0;
+                    cells_next(i, j) = 0;
                 } else {
-                    (*cells_next)(i, j) = 1;
+                    cells_next(i, j) = 1;
                 }
             } else {
                 if (cells_count(i, j) == 3) {
-                    (*cells_next)(i, j) = 1;
+                    cells_next(i, j) = 1;
                 } else {
-                    (*cells_next)(i, j) = 0;
+                    cells_next(i, j) = 0;
                 }
             }
         }
