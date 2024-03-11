@@ -8,21 +8,18 @@
  */
 
 class World {
-  private:
-    int *data;
-
   public:
     int n_rows;
     int n_cols;
+    Matrix cells_0;
+    Matrix cells_1;
     int age;
     int side;
-    World(int n_rows, int n_cols);
-    int &operator()(int i, int j);
+    World(Matrix seed);
     int evolve();
     int update_boundary();
-    ~World();
-    World(World &old_world);
-    World &operator=(World &world);
+    int display_world();
+    int random_seed();
 };
 
 #endif

@@ -1,6 +1,6 @@
 add_library(conway_lib
     STATIC
-    conway.cpp
+    world.cpp
     matrix.cpp
 )
 
