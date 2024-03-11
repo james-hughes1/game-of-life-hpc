@@ -14,9 +14,21 @@ int main() {
 
     Matrix A = matrix::generate_matrix(5, 5);
 
-    World w1 = World(A);
+    World world(A);
 
-    w1.display_world();
+    world.display_world();
+
+    world.evaluate_rules();
+
+    world.display_world();
+
+    world.evaluate_rules();
+
+    world.display_world();
+
+    world.evaluate_rules();
+
+    world.display_world();
 
     return 0;
 }

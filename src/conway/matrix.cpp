@@ -55,29 +55,32 @@ Matrix matrix::count_neighbours(Matrix A) {
      * Life. \param A Input matrix.
      */
 
-    Matrix B = Matrix(A.n_rows - 2, A.n_cols - 2);
+    Matrix B(A.n_rows, A.n_cols);
 
-    for (int i = 1; i < A.n_rows - 1; i++) {
-        for (int j = 1; j < A.n_cols - 1; j++) {
+    for (int i = 0; i < A.n_rows; i++) {
+        for (int j = 0; j < A.n_cols; j++) {
+            B(i, j) = 0;
             for (int p = -1; p < 2; p++) {
                 for (int q = -1; q < 2; q++) {
-                    B(i - 1, j - 1) += A(i + p, j + q);
+                    B(i, j) += A(i + p, j + q);
                 }
             }
-            B(i - 1, j - 1) -= A(i, j);
+            B(i, j) -= A(i, j);
+            if (i == 0 or i == A.n_rows - 1 or j == 0 or j == A.n_cols - 1) {
+                B(i, j) = -1;
+            }
         }
-        std::cout << std::endl;
     }
     return B;
 }
 
 Matrix matrix::generate_matrix(int n_rows, int n_cols) {
-    Matrix A = Matrix(n_rows, n_cols);
+    Matrix A(n_rows, n_cols);
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distrib(0, 1);
     for (int i = 0; i < n_rows; i++) {
-        for (int j = 0; j < n_rows; j++) {
+        for (int j = 0; j < n_cols; j++) {
             A(i, j) = distrib(gen);
         }
     }
