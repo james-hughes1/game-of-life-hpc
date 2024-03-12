@@ -18,4 +18,12 @@ To compile the documentation run
 
 `make -C docs/latex`
 
+To run the code use
+
+`./bin/main`
+
+and for the test suite use
+
+`./bin/test_conway`
+
 ## Details
