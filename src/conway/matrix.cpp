@@ -4,8 +4,11 @@
 
 #include <iostream>
 #include <random>
+#include <string>
 
 #include "matrix.h"
+
+// class Matrix
 
 Matrix::Matrix(int n_rows, int n_cols) {
     this->n_rows = n_rows;
@@ -35,18 +38,46 @@ Matrix &Matrix::operator=(Matrix &old_matrix) {
     return *this;
 }
 
-int matrix::display_matrix(Matrix A) {
-    /**
-     * \brief Displays a matrix.
-     * \param A Matrix to be displayed.
-     */
-    for (int i = 0; i < A.n_rows; i++) {
-        for (int j = 0; j < A.n_cols; j++) {
-            std::cout << A(i, j) << " ";
+bool Matrix::operator==(Matrix &matrix_other) {
+    if (this->n_rows != matrix_other.n_rows or
+        this->n_cols != matrix_other.n_cols) {
+        return false;
+    }
+    for (int i = 0; i < (this->n_rows) * (this->n_cols); i++) {
+        if (this->data[i] != matrix_other.data[i]) {
+            return false;
         }
-        std::cout << std::endl;
+    }
+    return true;
+}
+
+int Matrix::zero() {
+    for (int i = 0; i < (n_rows) * (n_cols); i++) {
+        data[i] = 0;
     }
     return 0;
+}
+
+int Matrix::write_submatrix(Matrix &submatrix) {
+    this->data[1] = submatrix(0, 0);
+    return 0;
+}
+Matrix Matrix::read_submatrix() { return *this; }
+
+// namespace matrix
+
+std::string matrix::read_file(std::string filename) { return filename; }
+
+Matrix matrix::read_matrix(std::string filename) {
+    std::cout << filename[0] << std::endl;
+    Matrix A(1, 1);
+    return A;
+}
+
+std::string matrix::write_matrix(Matrix A) {
+    std::cout << A(0, 0) << std::endl;
+    std::string output_str = "X";
+    return output_str;
 }
 
 Matrix matrix::count_neighbours(Matrix A) {

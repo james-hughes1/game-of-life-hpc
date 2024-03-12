@@ -11,8 +11,8 @@ class World {
   public:
     int n_rows;
     int n_cols;
-    Matrix cells_0;
-    Matrix cells_1;
+    Matrix Cells_0;
+    Matrix Cells_1;
     int age;
     int side;
     World(Matrix seed);
@@ -20,12 +20,13 @@ class World {
     int update_boundary();
     int display_world();
     int random_seed();
+    Matrix output_cells();
 };
 
 namespace conway {
-int evaluate_rules(Matrix cells_count, Matrix &cells_current,
-                   Matrix &cells_next);
-int update_boundary(Matrix &cells);
+int evaluate_rules(Matrix Cells_count, Matrix &Cells_current,
+                   Matrix &Cells_next);
+int update_boundary(Matrix &Cells);
 }; // namespace conway
 
 #endif
