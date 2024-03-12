@@ -16,6 +16,7 @@ set(CMAKE_CXX_FLAGS "-O0 -Werror -Wall -Wextra -pedantic")
 
 include(Doxygen)
 include(ClangFormat)
+include(Testing)
 
 set(DOXYGEN_PROJECT_NAME "Game of Life")
 doxygen_add_docs(
@@ -25,3 +26,4 @@ doxygen_add_docs(
 )
 
 add_subdirectory(src)
+add_subdirectory(test)
