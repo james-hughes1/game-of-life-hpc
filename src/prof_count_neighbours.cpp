@@ -28,5 +28,7 @@ int main() {
         }
     }
 
+    std::cout << "Test entry: " << B(1, 1) << std::endl;
+
     return 0;
 }
