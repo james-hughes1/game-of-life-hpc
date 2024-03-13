@@ -2,9 +2,11 @@
  * \file multiply.cpp Contains useful functions for matrix operations.
  */
 
+#include <fstream>
 #include <iostream>
 #include <random>
 #include <string>
+#include <vector>
 
 #include "matrix.h"
 
@@ -66,18 +68,84 @@ Matrix Matrix::read_submatrix() { return *this; }
 
 // namespace matrix
 
-std::string matrix::read_file(std::string filename) { return filename; }
+std::string matrix::read_file(std::string filename) {
+    std::string file_string = " ";
+    std::ifstream file;
+    std::string new_line;
+    file.open(filename);
+    if (!file.is_open()) {
+        throw std::invalid_argument("File does not exist.");
+    }
+    while (!file.eof()) {
+        std::getline(file, new_line);
+        for (size_t i = 0; i < new_line.length(); i++) {
+            if (new_line[i] == ' ') {
+                if (file_string.back() != ' ') {
+                    file_string.push_back(' ');
+                }
+            } else {
+                file_string.push_back(new_line[i]);
+            }
+        }
+        if (file_string.back() != ' ') {
+            file_string.push_back(' ');
+        }
+    }
+    file.close();
+    return file_string;
+}
 
-Matrix matrix::read_matrix(std::string filename) {
-    std::cout << filename[0] << std::endl;
-    Matrix A(1, 1);
+Matrix matrix::read_matrix(std::string matrix_string) {
+    std::vector<int> string_values(0);
+    std::string next_string = "";
+    for (size_t i = 0; i < matrix_string.length(); i++) {
+        if (matrix_string[i] == ' ') {
+            if (next_string != "") {
+                string_values.push_back(std::stoi(next_string));
+                next_string = "";
+            }
+        } else {
+            if (isdigit(matrix_string[i]) or matrix_string[i] == '-') {
+                next_string.push_back(matrix_string[i]);
+            } else {
+                throw std::invalid_argument(
+                    "String must have represent a sequence of integers.");
+            }
+        }
+    }
+    if (next_string != "") {
+        string_values.push_back(std::stoi(next_string));
+    }
+    long unsigned int check_size = string_values[0] * string_values[1] + 2;
+    if (string_values.size() != check_size) {
+        throw std::invalid_argument(
+            "Invalid string, first two integers misspecify the size.");
+    }
+    Matrix A(string_values[0], string_values[1]);
+    for (int i = 0; i < string_values[0]; i++) {
+        for (int j = 0; j < string_values[1]; j++) {
+            A(i, j) = string_values[i * string_values[1] + j + 2];
+        }
+    }
     return A;
 }
 
 std::string matrix::write_matrix(Matrix A) {
-    std::cout << A(0, 0) << std::endl;
-    std::string output_str = "X";
-    return output_str;
+    std::string output_string = "";
+    for (int i = 0; i < A.n_rows; i++) {
+        for (int j = 0; j < A.n_cols; j++) {
+            std::string number_string = std::to_string(A(i, j));
+            for (size_t k = 0; k < number_string.length(); k++) {
+                output_string.push_back(number_string[k]);
+            }
+            if (j == A.n_cols - 1) {
+                output_string.push_back('\n');
+            } else {
+                output_string.push_back(' ');
+            }
+        }
+    }
+    return output_string;
 }
 
 Matrix matrix::count_neighbours(Matrix A) {

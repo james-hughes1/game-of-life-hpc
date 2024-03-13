@@ -24,5 +24,7 @@ int main() {
     world.update_boundary();
     world.display_world();
 
+    matrix::read_file("test/test_data/input_file_1.txt");
+
     return 0;
 }

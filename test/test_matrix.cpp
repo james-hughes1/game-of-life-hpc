@@ -3,7 +3,7 @@
 
 #include "matrix.h"
 
-std::string STR_FILE = "a b c d 1 2 3 4 X! Hello Wo_rld.";
+std::string STR_FILE = " a b c d 1 2 3 4 X! Hello Wo_rld. ";
 TEST(File, ReadFileValid) {
     std::string str_out = matrix::read_file("test/test_data/input_file_1.txt");
     EXPECT_EQ(STR_FILE, str_out)
@@ -19,7 +19,7 @@ TEST(File, ReadFileInvalid) {
 int populate_matrix(Matrix &matrix) {
     for (int i = 0; i < matrix.n_rows; i++) {
         for (int j = 0; j < matrix.n_cols; j++) {
-            matrix(i, j) = matrix.n_rows * i + j;
+            matrix(i, j) = matrix.n_cols * i + j + 1;
         }
     }
     return 0;
@@ -54,32 +54,35 @@ TEST(Matrix, MatrixNEQShapeValid) {
         << "Matrices of different sizes are found to be equal.";
 }
 
-std::string STR_1 = "3 4 1 2 3 4 5 6 7 8 9 10 11 -1000";
-std::string STR_2 = "3 2 1 2 3 4 5 6 7 8 9 10 11 -1000";
-std::string STR_3 = "4 3 1 2 3 4 5 6.1 7 8e-3 9 10 11 -1000";
-
 TEST(Matrix, ReadMatrixValid) {
     Matrix MATRIX_1(3, 4);
     populate_matrix(MATRIX_1);
+    MATRIX_1(2, 3)    = -1000;
+    std::string STR_1 = "3 4 1 2 3 4 5 6 7 8 9 10 11 -1000";
+    Matrix B          = matrix::read_matrix(STR_1);
     EXPECT_TRUE(matrix::read_matrix(STR_1) == MATRIX_1)
         << "Valid input string not correctly converted to matrix.";
 }
 
 TEST(Matrix, ReadMatrixInvalidShape) {
     // Shape wrong
+    std::string STR_2 = "3 2 1 2 3 4 5 6 7 8 9 10 11 -1000";
     EXPECT_THROW(matrix::read_matrix(STR_2), std::invalid_argument)
         << "Invalid input string (bad shape) doesn't throw error.";
 }
 
 TEST(Matrix, ReadMatrixInvalidType) {
     // Contains anything other than spaces, digits and minus sign.
-    EXPECT_THROW(matrix::read_matrix(STR_2), std::invalid_argument)
+    std::string STR_3 = "4 3 1 2 3 4 5 6.1 7 8e-3 9 10 11 -1000";
+    EXPECT_THROW(matrix::read_matrix(STR_3), std::invalid_argument)
         << "Invalid input string (bad chars) doesn't throw error.";
 }
 
 TEST(Matrix, WriteMatrixValid) {
     Matrix MATRIX_1(3, 4);
     populate_matrix(MATRIX_1);
+    MATRIX_1(2, 3)    = -1000;
+    std::string STR_1 = "1 2 3 4\n5 6 7 8\n9 10 11 -1000\n";
     EXPECT_EQ(matrix::write_matrix(MATRIX_1), STR_1)
         << "Valid input matrix not correctly converted to string.";
 }
