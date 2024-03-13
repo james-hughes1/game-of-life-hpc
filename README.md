@@ -36,6 +36,9 @@ For profiling (replace `<...>` as appropriate), run
 
 Similarly, for the timing script (and saving to .txt) run
 
-`./bin/time_simulation > prof/time_simulation.txt`
+`./bin/time_<...> > testentries.txt`
+
+The redirect into `testentries.txt` is recommended as these scripts produce test entries to ensure the important code is not optimised away.
+The actual outputs of the timing are saved in `prof/time_<...>.txt`
 
 ## Details
