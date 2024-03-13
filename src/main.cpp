@@ -3,6 +3,7 @@
  */
 
 #include <iostream>
+#include <string>
 
 #include "matrix.h"
 #include "world.h"
@@ -12,19 +13,15 @@ int main() {
      * Main procedure to run.
      */
 
-    Matrix A = matrix::generate_matrix(6, 10);
+    std::string glider_seed_str = matrix::read_file("seed_glider.txt");
+    Matrix glider_seed          = matrix::read_matrix_str(glider_seed_str);
+    World Glider(glider_seed);
 
-    World world(A);
-
-    world.display_world();
-    world.update_boundary();
-    world.display_world();
-    world.evaluate_rules();
-    world.display_world();
-    world.update_boundary();
-    world.display_world();
-
-    matrix::read_file("test/test_data/input_file_1.txt");
-
+    Glider.display_world();
+    for (int age = 0; age < 50; age++) {
+        Glider.update_boundary();
+        Glider.evaluate_rules();
+        Glider.display_world();
+    }
     return 0;
 }

@@ -9,7 +9,10 @@
 #include "matrix.h"
 #include "world.h"
 
-World::World(Matrix seed) : Cells_0(seed), Cells_1(seed.n_rows, seed.n_cols) {
+World::World(Matrix seed)
+    : Cells_0(seed.n_rows + 2, seed.n_cols + 2),
+      Cells_1(seed.n_rows + 2, seed.n_cols + 2) {
+    Cells_0.write_sub_matrix(seed);
     n_rows = seed.n_rows;
     n_cols = seed.n_cols;
     age    = 0;
@@ -28,7 +31,6 @@ int World::evaluate_rules() {
 }
 
 int World::update_boundary() {
-    // Vertices
     if (age % 2 == 0) {
         conway::update_boundary(Cells_0);
     } else {
@@ -37,21 +39,26 @@ int World::update_boundary() {
     return 0;
 }
 
+Matrix World::output_cells() {
+    if (age % 2 == 0) {
+        return Cells_0.read_sub_matrix();
+    } else {
+        return Cells_1.read_sub_matrix();
+    }
+}
+
 int World::display_world() {
     std::cout << "World has age: " << age << " ticks." << std::endl;
     std::cout << "------------------------------" << std::endl;
-    std::string output = (age % 2 == 0) ? matrix::write_matrix(Cells_0)
-                                        : matrix::write_matrix(Cells_1);
+    std::string output = matrix::write_matrix_str((*this).output_cells());
     std::cout << output << std::endl;
     return 0;
 }
 
-Matrix World::output_cells() { return Cells_0; }
-
 int conway::evaluate_rules(Matrix Cells_count, Matrix &Cells_current,
                            Matrix &Cells_next) {
-    for (int i = 1; i < Cells_count.n_rows - 1; i++) {
-        for (int j = 1; j < Cells_count.n_cols - 1; j++) {
+    for (int i = 0; i < Cells_count.n_rows; i++) {
+        for (int j = 0; j < Cells_count.n_cols; j++) {
             if (Cells_current(i, j) == 1) {
                 if (Cells_count(i, j) != 2 and Cells_count(i, j) != 3) {
                     Cells_next(i, j) = 0;
@@ -85,9 +92,9 @@ int conway::update_boundary(Matrix &Cells_current) {
         Cells_current(0, j) = Cells_current(Cells_current.n_rows - 2, j);
         Cells_current(Cells_current.n_rows - 1, j) = Cells_current(1, j);
     }
-    for (int i = 1; i < Cells_current.n_cols - 1; i++) {
+    for (int i = 1; i < Cells_current.n_rows - 1; i++) {
         Cells_current(i, 0) = Cells_current(i, Cells_current.n_cols - 2);
-        Cells_current(i, Cells_current.n_rows - 1) = Cells_current(i, 1);
+        Cells_current(i, Cells_current.n_cols - 1) = Cells_current(i, 1);
     }
     return 0;
 }

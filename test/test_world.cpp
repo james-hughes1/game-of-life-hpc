@@ -38,17 +38,17 @@ TEST(World, EvaluateRules) {
     Cells_count(1, 2) = 3;
     Cells_count(1, 3) = 4;
     Cells_count(2, 1) = 1;
-    Cells_count(2, 2) = 2;
+    Cells_count(2, 2) = 3;
     Cells_count(2, 3) = 4;
 
     conway::evaluate_rules(Cells_count, Cells_input, Cells_output);
 
-    EXPECT_TRUE(Cells_count(1, 1) = 1);
-    EXPECT_TRUE(Cells_count(1, 2) = 1);
-    EXPECT_TRUE(Cells_count(1, 3) = 0);
-    EXPECT_TRUE(Cells_count(2, 1) = 0);
-    EXPECT_TRUE(Cells_count(2, 2) = 1);
-    EXPECT_TRUE(Cells_count(2, 3) = 0);
+    EXPECT_TRUE(Cells_output(1, 1) == 1);
+    EXPECT_TRUE(Cells_output(1, 2) == 1);
+    EXPECT_TRUE(Cells_output(1, 3) == 0);
+    EXPECT_TRUE(Cells_output(2, 1) == 0);
+    EXPECT_TRUE(Cells_output(2, 2) == 1);
+    EXPECT_TRUE(Cells_output(2, 3) == 0);
 }
 
 TEST(World, UpdateBoundary) {
@@ -63,34 +63,35 @@ TEST(World, UpdateBoundary) {
 
     conway::update_boundary(Cells_input);
 
-    EXPECT_TRUE(Cells_input(0, 0) = 0);
-    EXPECT_TRUE(Cells_input(0, 1) = 1);
-    EXPECT_TRUE(Cells_input(0, 2) = 0);
-    EXPECT_TRUE(Cells_input(0, 3) = 0);
-    EXPECT_TRUE(Cells_input(0, 4) = 1);
+    EXPECT_EQ(Cells_input(0, 0), 0);
+    EXPECT_EQ(Cells_input(0, 1), 1);
+    EXPECT_EQ(Cells_input(0, 2), 0);
+    EXPECT_EQ(Cells_input(0, 3), 0);
+    EXPECT_EQ(Cells_input(0, 4), 1);
 
-    EXPECT_TRUE(Cells_input(1, 0) = 1);
-    EXPECT_TRUE(Cells_input(2, 0) = 0);
+    EXPECT_EQ(Cells_input(1, 0), 1);
+    EXPECT_EQ(Cells_input(2, 0), 0);
 
-    EXPECT_TRUE(Cells_input(1, 4) = 0);
-    EXPECT_TRUE(Cells_input(2, 4) = 1);
+    EXPECT_EQ(Cells_input(1, 4), 0);
+    EXPECT_EQ(Cells_input(2, 4), 1);
 
-    EXPECT_TRUE(Cells_input(3, 0) = 1);
-    EXPECT_TRUE(Cells_input(3, 1) = 0);
-    EXPECT_TRUE(Cells_input(3, 2) = 1);
-    EXPECT_TRUE(Cells_input(3, 3) = 1);
-    EXPECT_TRUE(Cells_input(3, 4) = 0);
+    EXPECT_EQ(Cells_input(3, 0), 1);
+    EXPECT_EQ(Cells_input(3, 1), 0);
+    EXPECT_EQ(Cells_input(3, 2), 1);
+    EXPECT_EQ(Cells_input(3, 3), 1);
+    EXPECT_EQ(Cells_input(3, 4), 0);
 }
 
 TEST(World, Toad) {
-    Matrix Cells_seed(100, 100);
+    // https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#References
+    Matrix Cells_seed(20, 100);
     Cells_seed.zero();
-    Cells_seed(49, 49) = 1;
-    Cells_seed(49, 50) = 1;
-    Cells_seed(49, 51) = 1;
-    Cells_seed(50, 48) = 1;
-    Cells_seed(50, 49) = 1;
-    Cells_seed(50, 50) = 1;
+    Cells_seed(9, 49)  = 1;
+    Cells_seed(9, 50)  = 1;
+    Cells_seed(9, 51)  = 1;
+    Cells_seed(10, 48) = 1;
+    Cells_seed(10, 49) = 1;
+    Cells_seed(10, 50) = 1;
     World ToadWorld(Cells_seed);
     for (int tick = 0; tick < 10; tick++) {
         ToadWorld.update_boundary();
@@ -104,4 +105,26 @@ TEST(World, Toad) {
     EXPECT_TRUE(!(Cells_age_11 == Cells_seed));
 }
 
-TEST(World, Glider) { EXPECT_TRUE(true); }
+TEST(World, Glider) {
+    // https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#References
+    Matrix Cells_seed(20, 20);
+    Cells_seed.zero();
+    Cells_seed(8, 10)  = 1;
+    Cells_seed(9, 10)  = 1;
+    Cells_seed(10, 10) = 1;
+    Cells_seed(10, 9)  = 1;
+    Cells_seed(9, 8)   = 1;
+    World GliderWorld(Cells_seed);
+    for (int tick = 0; tick < 80; tick++) {
+        // Every 4 ticks the glider moves one cell right, one down.
+        // So it has periodicity 4*world_size if the world is square.
+        GliderWorld.update_boundary();
+        GliderWorld.evaluate_rules();
+    }
+    Matrix Cells_age_80 = GliderWorld.output_cells();
+    EXPECT_TRUE(Cells_age_80 == Cells_seed);
+    GliderWorld.update_boundary();
+    GliderWorld.evaluate_rules();
+    Matrix Cells_age_81 = GliderWorld.output_cells();
+    EXPECT_TRUE(!(Cells_age_81 == Cells_seed));
+}

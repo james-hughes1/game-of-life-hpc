@@ -59,22 +59,22 @@ TEST(Matrix, ReadMatrixValid) {
     populate_matrix(MATRIX_1);
     MATRIX_1(2, 3)    = -1000;
     std::string STR_1 = "3 4 1 2 3 4 5 6 7 8 9 10 11 -1000";
-    Matrix B          = matrix::read_matrix(STR_1);
-    EXPECT_TRUE(matrix::read_matrix(STR_1) == MATRIX_1)
+    Matrix B          = matrix::read_matrix_str(STR_1);
+    EXPECT_TRUE(matrix::read_matrix_str(STR_1) == MATRIX_1)
         << "Valid input string not correctly converted to matrix.";
 }
 
 TEST(Matrix, ReadMatrixInvalidShape) {
     // Shape wrong
     std::string STR_2 = "3 2 1 2 3 4 5 6 7 8 9 10 11 -1000";
-    EXPECT_THROW(matrix::read_matrix(STR_2), std::invalid_argument)
+    EXPECT_THROW(matrix::read_matrix_str(STR_2), std::invalid_argument)
         << "Invalid input string (bad shape) doesn't throw error.";
 }
 
 TEST(Matrix, ReadMatrixInvalidType) {
     // Contains anything other than spaces, digits and minus sign.
     std::string STR_3 = "4 3 1 2 3 4 5 6.1 7 8e-3 9 10 11 -1000";
-    EXPECT_THROW(matrix::read_matrix(STR_3), std::invalid_argument)
+    EXPECT_THROW(matrix::read_matrix_str(STR_3), std::invalid_argument)
         << "Invalid input string (bad chars) doesn't throw error.";
 }
 
@@ -83,7 +83,7 @@ TEST(Matrix, WriteMatrixValid) {
     populate_matrix(MATRIX_1);
     MATRIX_1(2, 3)    = -1000;
     std::string STR_1 = "1 2 3 4\n5 6 7 8\n9 10 11 -1000\n";
-    EXPECT_EQ(matrix::write_matrix(MATRIX_1), STR_1)
+    EXPECT_EQ(matrix::write_matrix_str(MATRIX_1), STR_1)
         << "Valid input matrix not correctly converted to string.";
 }
 
@@ -101,16 +101,18 @@ TEST(Matrix, CountNeighboursValid) {
     Matrix MATRIX_5(4, 5);
     populate_matrix(MATRIX_5);
     Matrix Counts = matrix::count_neighbours(MATRIX_5);
-    EXPECT_TRUE(Counts(1, 1) == 56)
+    EXPECT_EQ(Counts.n_rows, 4);
+    EXPECT_EQ(Counts.n_cols, 5);
+    EXPECT_EQ(Counts(1, 1), 56)
         << "count_neighbours does not compute correct answers.";
-    EXPECT_TRUE(Counts(1, 2) == 64)
+    EXPECT_EQ(Counts(1, 2), 64)
         << "count_neighbours does not compute correct answers.";
-    EXPECT_TRUE(Counts(1, 3) == 72)
+    EXPECT_EQ(Counts(1, 3), 72)
         << "count_neighbours does not compute correct answers.";
-    EXPECT_TRUE(Counts(2, 1) == 96)
+    EXPECT_EQ(Counts(2, 1), 96)
         << "count_neighbours does not compute correct answers.";
-    EXPECT_TRUE(Counts(2, 2) == 104)
+    EXPECT_EQ(Counts(2, 2), 104)
         << "count_neighbours does not compute correct answers.";
-    EXPECT_TRUE(Counts(2, 3) == 112)
+    EXPECT_EQ(Counts(2, 3), 112)
         << "count_neighbours does not compute correct answers.";
 }

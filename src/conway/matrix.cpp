@@ -60,11 +60,24 @@ int Matrix::zero() {
     return 0;
 }
 
-int Matrix::write_submatrix(Matrix &submatrix) {
-    this->data[1] = submatrix(0, 0);
+int Matrix::write_sub_matrix(Matrix &sub_matrix) {
+    for (int i = 0; i < sub_matrix.n_rows; i++) {
+        for (int j = 0; j < sub_matrix.n_rows; j++) {
+            (*this)(i + 1, j + 1) = sub_matrix(i, j);
+        }
+    }
     return 0;
 }
-Matrix Matrix::read_submatrix() { return *this; }
+
+Matrix Matrix::read_sub_matrix() {
+    Matrix sub_matrix(this->n_rows - 2, this->n_cols - 2);
+    for (int i = 0; i < sub_matrix.n_rows; i++) {
+        for (int j = 0; j < sub_matrix.n_rows; j++) {
+            sub_matrix(i, j) = (*this)(i + 1, j + 1);
+        }
+    }
+    return sub_matrix;
+}
 
 // namespace matrix
 
@@ -95,7 +108,7 @@ std::string matrix::read_file(std::string filename) {
     return file_string;
 }
 
-Matrix matrix::read_matrix(std::string matrix_string) {
+Matrix matrix::read_matrix_str(std::string matrix_string) {
     std::vector<int> string_values(0);
     std::string next_string = "";
     for (size_t i = 0; i < matrix_string.length(); i++) {
@@ -130,7 +143,7 @@ Matrix matrix::read_matrix(std::string matrix_string) {
     return A;
 }
 
-std::string matrix::write_matrix(Matrix A) {
+std::string matrix::write_matrix_str(Matrix A) {
     std::string output_string = "";
     for (int i = 0; i < A.n_rows; i++) {
         for (int j = 0; j < A.n_cols; j++) {

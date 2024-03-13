@@ -22,14 +22,14 @@ class Matrix {
     Matrix &operator=(Matrix &old_matrix);
     bool operator==(Matrix &matrix_other);
     int zero();
-    int write_submatrix(Matrix &submatrix);
-    Matrix read_submatrix();
+    int write_sub_matrix(Matrix &sub_matrix);
+    Matrix read_sub_matrix();
 };
 
 namespace matrix {
 std::string read_file(std::string filename);
-Matrix read_matrix(std::string matrix_string);
-std::string write_matrix(Matrix A);
+Matrix read_matrix_str(std::string matrix_string);
+std::string write_matrix_str(Matrix A);
 Matrix count_neighbours(Matrix A);
 Matrix generate_matrix(int n_rows, int n_cols);
 }; // namespace matrix
