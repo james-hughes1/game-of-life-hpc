@@ -21,7 +21,7 @@ int main() {
     for (int age = 0; age < 50; age++) {
         Glider.update_boundary();
         Glider.evaluate_rules();
-        Glider.display_world();
     }
+    Glider.display_world();
     return 0;
 }
