@@ -19,6 +19,7 @@ int time(int n_rows, int n_cols, int final_age) {
         RandomWorld.update_boundary();
         RandomWorld.evaluate_rules();
     }
+    std::cout << "Test entry: " << RandomWorld.Cells_0(1, 1) << std::endl;
     std::cout << "World size " << n_rows << "x" << n_cols << " age "
               << final_age << " /////// Took: " << timing::get_split() << " ms."
               << std::endl;

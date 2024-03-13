@@ -17,5 +17,7 @@ int main() {
         RandomWorld.evaluate_rules();
     }
 
+    std::cout << "Test entry: " << RandomWorld.Cells_0(1, 1) << std::endl;
+
     return 0;
 }
