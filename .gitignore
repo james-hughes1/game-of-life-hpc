@@ -20,3 +20,5 @@ docs/latex/*
 
 # Profiling
 gmon.out
+prof/*
+!prof/*.txt
