@@ -3,13 +3,14 @@
  * size.
  */
 
+#include <fstream>
 #include <iostream>
 #include <string>
 
 #include "conway/include/matrix.h"
 #include "timing/include/timing.h"
 
-int time_count_neighbours(int n_rows, int n_cols) {
+double time_count_neighbours(int n_rows, int n_cols) {
     double total_time;
     timing::start_clock();
     for (int run = 0; run < 10; run++) {
@@ -19,10 +20,7 @@ int time_count_neighbours(int n_rows, int n_cols) {
         std::cout << "Test entry: " << count_matrix(1, 1) << std::endl;
         total_time += (timing::get_split() - start_time);
     }
-    std::cout << "Matrix size " << n_rows << "x" << n_cols
-              << " /////// Took: " << timing::get_split() / 10
-              << " ms. (Mean of 10 runs.)" << std::endl;
-    return 0;
+    return timing::get_split() / 10;
 }
 
 int main() {
@@ -30,15 +28,17 @@ int main() {
      * Main procedure to run.
      */
 
-    for (int matrix_size = 2; matrix_size <= 1024; matrix_size *= 2) {
-        time_count_neighbours(matrix_size, matrix_size);
+    std::fstream file("prof/time_count_neighbours.txt");
+    for (int matrix_size = 4; matrix_size <= 10000; matrix_size *= 2) {
+        for (int offset = 0; offset < 3; offset++) {
+            file << "Matrix size " << matrix_size << "x" << matrix_size
+                 << " /////// Took: "
+                 << time_count_neighbours(matrix_size, matrix_size)
+                 << " ms. (Mean of 10 runs.)" << std::endl;
+        }
+        file << std::endl;
     }
-    for (int matrix_size = 4; matrix_size <= 1024; matrix_size *= 2) {
-        time_count_neighbours(matrix_size - 1, matrix_size - 1);
-    }
-    for (int matrix_size = 4; matrix_size <= 1024; matrix_size *= 2) {
-        time_count_neighbours(matrix_size - 2, matrix_size - 2);
-    }
+    file.close();
 
     return 0;
 }
