@@ -6,8 +6,8 @@
 #include <random>
 #include <string>
 
-#include "matrix.h"
-#include "world.h"
+#include "include/matrix.h"
+#include "include/world.h"
 
 World::World(Matrix seed)
     : Cells_0(seed.n_rows + 2, seed.n_cols + 2),

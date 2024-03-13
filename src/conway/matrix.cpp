@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "matrix.h"
+#include "include/matrix.h"
 
 // class Matrix
 

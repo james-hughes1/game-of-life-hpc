@@ -6,9 +6,9 @@
 #include <iostream>
 #include <string>
 
-#include "matrix.h"
-#include "timing.h"
-#include "world.h"
+#include "conway/include/matrix.h"
+#include "conway/include/world.h"
+#include "timing/include/timing.h"
 
 int time(int n_rows, int n_cols, int final_age) {
     Matrix random_seed = matrix::generate_matrix(n_rows, n_cols);

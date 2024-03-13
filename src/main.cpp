@@ -5,8 +5,8 @@
 #include <iostream>
 #include <string>
 
-#include "matrix.h"
-#include "world.h"
+#include "conway/include/matrix.h"
+#include "conway/include/world.h"
 
 int main() {
     /**
