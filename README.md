@@ -26,4 +26,16 @@ and for the test suite use
 
 `./bin/test_conway`
 
+For profiling (replace `<...>` as appropriate), run
+
+`g++ -pg src/conway/matrix.cpp src/conway/world.cpp src/prof_<...>.cpp -o prof/prof_<...>`
+
+`prof/prof_<...>`
+
+`gprof prof/prof_<...> ./gmon.out > prof/prof_<...>.txt`
+
+Similarly, for the timing script (and saving to .txt) run
+
+`./bin/time_simulation > prof/time_simulation.txt`
+
 ## Details
