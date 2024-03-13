@@ -30,7 +30,7 @@ namespace matrix {
 std::string read_file(std::string filename);
 Matrix read_matrix_str(std::string matrix_string);
 std::string write_matrix_str(Matrix A);
-Matrix count_neighbours(Matrix A);
+Matrix count_neighbours(Matrix &A);
 Matrix generate_matrix(int n_rows, int n_cols);
 }; // namespace matrix
 

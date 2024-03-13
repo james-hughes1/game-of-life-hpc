@@ -31,9 +31,10 @@ int main() {
     std::fstream file("prof/time_count_neighbours.txt");
     for (int matrix_size = 4; matrix_size <= 10000; matrix_size *= 2) {
         for (int offset = 0; offset < 3; offset++) {
-            file << "Matrix size " << matrix_size << "x" << matrix_size
-                 << " /////// Took: "
-                 << time_count_neighbours(matrix_size, matrix_size)
+            file << "Matrix size " << matrix_size - offset << "x"
+                 << matrix_size - offset << " /////// Took: "
+                 << time_count_neighbours(matrix_size - offset,
+                                          matrix_size - offset)
                  << " ms. (Mean of 10 runs.)" << std::endl;
         }
         file << std::endl;
