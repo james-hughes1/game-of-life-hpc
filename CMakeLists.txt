@@ -12,7 +12,7 @@ list(APPEND CMAKE_MODULE_PATH "./cmake")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 
-set(CMAKE_CXX_FLAGS "-O0 -Werror -Wall -Wextra -pedantic")
+set(CMAKE_CXX_FLAGS "-O3 -march=native -Werror -Wall -Wextra -pedantic")
 
 include(Doxygen)
 include(ClangFormat)
