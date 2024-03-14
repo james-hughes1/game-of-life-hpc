@@ -28,7 +28,7 @@ and for the test suite use
 
 For profiling (replace `<...>` as appropriate), run
 
-`g++ -pg src/conway/matrix.cpp src/conway/world.cpp src/prof_<...>.cpp -o prof/prof_<...>`
+`g++ -O3 -march=native -pg src/conway/matrix.cpp src/conway/world.cpp src/prof_<...>.cpp -o prof/prof_<...>`
 
 `prof/prof_<...>`
 
