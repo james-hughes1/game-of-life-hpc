@@ -55,23 +55,13 @@ int World::display_world() {
     return 0;
 }
 
-int conway::evaluate_rules(Matrix Cells_count, Matrix &Cells_current,
+int conway::evaluate_rules(Matrix &Cells_count, Matrix &Cells_current,
                            Matrix &Cells_next) {
     for (int i = 0; i < Cells_count.n_rows; i++) {
         for (int j = 0; j < Cells_count.n_cols; j++) {
-            if (Cells_current(i, j) == 1) {
-                if (Cells_count(i, j) != 2 and Cells_count(i, j) != 3) {
-                    Cells_next(i, j) = 0;
-                } else {
-                    Cells_next(i, j) = 1;
-                }
-            } else {
-                if (Cells_count(i, j) == 3) {
-                    Cells_next(i, j) = 1;
-                } else {
-                    Cells_next(i, j) = 0;
-                }
-            }
+            Cells_next(i, j) =
+                (Cells_count(i, j) == 3) ||
+                ((Cells_count(i, j) == 2) && (Cells_current(i, j) == 1));
         }
     }
     return 0;
