@@ -17,7 +17,6 @@ double time_count_neighbours(int n_rows, int n_cols) {
         Matrix random_matrix = matrix::generate_matrix(n_rows, n_cols);
         double start_time    = timing::get_split();
         Matrix count_matrix  = matrix::count_neighbours(random_matrix);
-        std::cout << "Test entry: " << count_matrix(1, 1) << std::endl;
         total_time += (timing::get_split() - start_time);
     }
     return timing::get_split() / 10;

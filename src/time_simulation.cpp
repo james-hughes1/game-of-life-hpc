@@ -20,7 +20,6 @@ double time_simulation(int n_rows, int n_cols, int final_age) {
         RandomWorld.update_boundary();
         RandomWorld.evaluate_rules();
     }
-    std::cout << "Test entry: " << RandomWorld.Cells_0(1, 1) << std::endl;
     return timing::get_split();
 }
 
