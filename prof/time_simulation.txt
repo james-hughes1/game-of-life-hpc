@@ -1,39 +1,39 @@
-World size 4x4, age 100 /////// Took: 0.099066 ms.
-World size 3x3, age 100 /////// Took: 0.03199 ms.
-World size 2x2, age 100 /////// Took: 0.022315 ms.
+World size 4x4, age 100 /////// Took: 0.169998 ms.
+World size 3x3, age 100 /////// Took: 0.06524 ms.
+World size 2x2, age 100 /////// Took: 0.043809 ms.
 
-World size 8x8, age 100 /////// Took: 0.105859 ms.
-World size 7x7, age 100 /////// Took: 0.069493 ms.
-World size 6x6, age 100 /////// Took: 0.055458 ms.
+World size 8x8, age 100 /////// Took: 0.169518 ms.
+World size 7x7, age 100 /////// Took: 0.137981 ms.
+World size 6x6, age 100 /////// Took: 0.097283 ms.
 
-World size 16x16, age 100 /////// Took: 0.478609 ms.
-World size 15x15, age 100 /////// Took: 0.398463 ms.
-World size 14x14, age 100 /////// Took: 0.406532 ms.
+World size 16x16, age 100 /////// Took: 0.530687 ms.
+World size 15x15, age 100 /////// Took: 0.359476 ms.
+World size 14x14, age 100 /////// Took: 0.34686 ms.
 
-World size 32x32, age 100 /////// Took: 1.43757 ms.
-World size 31x31, age 100 /////// Took: 1.20032 ms.
-World size 30x30, age 100 /////// Took: 1.4652 ms.
+World size 32x32, age 100 /////// Took: 1.51468 ms.
+World size 31x31, age 100 /////// Took: 1.49609 ms.
+World size 30x30, age 100 /////// Took: 1.50789 ms.
 
-World size 64x64, age 100 /////// Took: 5.46975 ms.
-World size 63x63, age 100 /////// Took: 4.27273 ms.
-World size 62x62, age 100 /////// Took: 6.32798 ms.
+World size 64x64, age 100 /////// Took: 6.08191 ms.
+World size 63x63, age 100 /////// Took: 7.06031 ms.
+World size 62x62, age 100 /////// Took: 4.82008 ms.
 
-World size 128x128, age 100 /////// Took: 17.9372 ms.
-World size 127x127, age 100 /////// Took: 15.5094 ms.
-World size 126x126, age 100 /////// Took: 15.0127 ms.
+World size 128x128, age 100 /////// Took: 18.8071 ms.
+World size 127x127, age 100 /////// Took: 15.2033 ms.
+World size 126x126, age 100 /////// Took: 19.9335 ms.
 
-World size 256x256, age 100 /////// Took: 67.2119 ms.
-World size 255x255, age 100 /////// Took: 96.8334 ms.
-World size 254x254, age 100 /////// Took: 81.0688 ms.
+World size 256x256, age 100 /////// Took: 69.9634 ms.
+World size 255x255, age 100 /////// Took: 70.5868 ms.
+World size 254x254, age 100 /////// Took: 81.0955 ms.
 
-World size 512x512, age 100 /////// Took: 280.73 ms.
-World size 511x511, age 100 /////// Took: 369.349 ms.
-World size 510x510, age 100 /////// Took: 369.318 ms.
+World size 512x512, age 100 /////// Took: 324.519 ms.
+World size 511x511, age 100 /////// Took: 323.157 ms.
+World size 510x510, age 100 /////// Took: 451.707 ms.
 
-World size 1024x1024, age 100 /////// Took: 1271.85 ms.
-World size 1023x1023, age 100 /////// Took: 1085.96 ms.
-World size 1022x1022, age 100 /////// Took: 1120.73 ms.
+World size 1024x1024, age 100 /////// Took: 1287.52 ms.
+World size 1023x1023, age 100 /////// Took: 1407.2 ms.
+World size 1022x1022, age 100 /////// Took: 1684.91 ms.
 
-World size 2048x2048, age 100 /////// Took: 4101.99 ms.
-World size 2047x2047, age 100 /////// Took: 4194.05 ms.
-World size 2046x2046, age 100 /////// Took: 4704.51 ms.
+World size 2048x2048, age 100 /////// Took: 5830.01 ms.
+World size 2047x2047, age 100 /////// Took: 6002.45 ms.
+World size 2046x2046, age 100 /////// Took: 11277.2 ms.
