@@ -7,11 +7,10 @@
 #include <string>
 #include <tuple>
 
-#include "include/matrix.h"
-#include "include/parallel.h"
-#include "include/world.h"
+#include "matrix.h"
+#include "world.h"
 
-std::tuple<int, int> parallel::divide_rows(int rows, int size, int rank) {
+std::tuple<int, int> divide_rows(int rows, int size, int rank) {
     int row_rank  = rows / size;
     int auxrow    = rows % size;
     int start_row = rank * row_rank;
@@ -30,7 +29,7 @@ std::tuple<int, int> parallel::divide_rows(int rows, int size, int rank) {
     return std::make_tuple(start_row, end_row);
 }
 
-int parallel::decomposition_1d(int argc, char **argv) {
+int main(int argc, char **argv) {
     /**
      * Main procedure to run.
      */
@@ -42,18 +41,18 @@ int parallel::decomposition_1d(int argc, char **argv) {
 
     MPI_Status status;
 
-    int N_ROWS_TOTAL = 11;
-    int N_COLS_TOTAL = 12;
+    int N_ROWS_TOTAL = 43;
+    int N_COLS_TOTAL = 17;
     int MAX_AGE      = 50;
 
     // Gen seed on rank 0
     auto full_data = new int[N_ROWS_TOTAL * N_COLS_TOTAL];
 
     if (rank == 0) {
-        Matrix seed =
-            matrix::read_matrix_str(matrix::read_file("seed_glider.txt"));
-        std::cout << "Generated seed on rank " << rank << std::endl;
-        std::cout << matrix::write_matrix_str(seed) << std::endl;
+        std::string seed_str =
+            matrix::read_file("test/test_data/input_file_2.txt");
+        Matrix seed = matrix::read_matrix_str(seed_str);
+        std::cout << "Initial seed:\n" << matrix::write_matrix_str(seed);
         for (int i = 0; i < N_ROWS_TOTAL; i++) {
             for (int j = 0; j < N_COLS_TOTAL; j++) {
                 full_data[i * N_COLS_TOTAL + j] = seed(i, j);
@@ -127,19 +126,26 @@ int parallel::decomposition_1d(int argc, char **argv) {
     MPI_Gatherv(chunk_data, (row_end - row_start) * N_COLS_TOTAL, MPI_INT,
                 full_data, chunk_sizes, offsets, MPI_INT, 0, MPI_COMM_WORLD);
 
-    // Write to a matrix and display via rank 0
+    // Write to a matrix and test against expected.
 
     if (rank == 0) {
-        Matrix output_matrix(N_ROWS_TOTAL, N_COLS_TOTAL);
+        Matrix final_state(N_ROWS_TOTAL, N_COLS_TOTAL);
         for (int i = 0; i < N_ROWS_TOTAL; i++) {
             for (int j = 0; j < N_COLS_TOTAL; j++) {
-                output_matrix(i, j) = full_data[i * N_COLS_TOTAL + j];
+                final_state(i, j) = full_data[i * N_COLS_TOTAL + j];
             }
         }
-        std::cout << "Final state of simulation: " << std::endl;
-        std::cout << matrix::write_matrix_str(output_matrix) << std::endl;
+        std::cout << "Final state at age " << MAX_AGE << ":\n"
+                  << matrix::write_matrix_str(final_state);
+        std::string expected_str =
+            matrix::read_file("test/test_data/output_file_2.txt");
+        Matrix expected_state = matrix::read_matrix_str(expected_str);
+        if (final_state == expected_state) {
+            std::cout << "Test passed." << std::endl;
+        } else {
+            std::cout << "Test failed." << std::endl;
+        }
     }
 
     MPI_Finalize();
-    return 0;
 }

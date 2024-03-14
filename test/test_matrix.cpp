@@ -11,7 +11,7 @@ TEST(File, ReadFileValid) {
 }
 
 TEST(File, ReadFileInvalid) {
-    EXPECT_THROW(matrix::read_file("test/test_data/input_file_2.txt"),
+    EXPECT_THROW(matrix::read_file("test/test_data/abc.txt"),
                  std::invalid_argument)
         << "Non-existent text file doesn't throw error.";
 }
