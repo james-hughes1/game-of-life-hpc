@@ -62,7 +62,7 @@ int Matrix::zero() {
 
 int Matrix::write_sub_matrix(Matrix &sub_matrix) {
     for (int i = 0; i < sub_matrix.n_rows; i++) {
-        for (int j = 0; j < sub_matrix.n_rows; j++) {
+        for (int j = 0; j < sub_matrix.n_cols; j++) {
             (*this)(i + 1, j + 1) = sub_matrix(i, j);
         }
     }
@@ -72,7 +72,7 @@ int Matrix::write_sub_matrix(Matrix &sub_matrix) {
 Matrix Matrix::read_sub_matrix() {
     Matrix sub_matrix(this->n_rows - 2, this->n_cols - 2);
     for (int i = 0; i < sub_matrix.n_rows; i++) {
-        for (int j = 0; j < sub_matrix.n_rows; j++) {
+        for (int j = 0; j < sub_matrix.n_cols; j++) {
             sub_matrix(i, j) = (*this)(i + 1, j + 1);
         }
     }
