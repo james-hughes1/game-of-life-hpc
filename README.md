@@ -38,6 +38,10 @@ Similarly, for the timing script (and saving to .txt) run
 
 `./bin/time_<...> > testentries.txt`
 
+or for the domain decompositions, run
+
+`mpirun -n <1/2/4> ./bin/time_1d_decomp`
+
 The redirect into `testentries.txt` is recommended as these scripts produce test entries to ensure the important code is not optimised away.
 The actual outputs of the timing are saved in `prof/time_<...>.txt`
 
