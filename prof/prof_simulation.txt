@@ -2,48 +2,48 @@ Flat profile:
 
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total
- time   seconds   seconds    calls  us/call  us/call  name
- 70.00      0.04     0.04 12417894     0.00     0.00  Matrix::operator()(int, int)
- 20.00      0.04     0.01      203    49.26    49.26  Matrix::Matrix(int, int)
- 10.00      0.05     0.01      304    16.45    16.45  Matrix::~Matrix()
-  0.00      0.05     0.00    20000     0.00     0.00  std::uniform_int_distribution<int>::param_type::a() const
-  0.00      0.05     0.00    10000     0.00     0.00  std::uniform_int_distribution<int>::param_type::b() const
-  0.00      0.05     0.00    10000     0.00     0.00  std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::operator()()
-  0.00      0.05     0.00    10000     0.00     0.00  unsigned int std::uniform_int_distribution<int>::_S_nd<unsigned long, std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>, unsigned int>(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, unsigned int)
-  0.00      0.05     0.00    10000     0.00     0.00  int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&)
-  0.00      0.05     0.00    10000     0.00     0.00  int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&)
-  0.00      0.05     0.00      624     0.00     0.00  std::__detail::_Mod<unsigned long, 4294967296ul, 1ul, 0ul, true, true>::__calc(unsigned long)
-  0.00      0.05     0.00      624     0.00     0.00  unsigned long std::__detail::__mod<unsigned long, 4294967296ul, 1ul, 0ul>(unsigned long)
-  0.00      0.05     0.00      623     0.00     0.00  std::__detail::_Mod<unsigned long, 624ul, 1ul, 0ul, true, true>::__calc(unsigned long)
-  0.00      0.05     0.00      623     0.00     0.00  unsigned long std::__detail::__mod<unsigned long, 624ul, 1ul, 0ul>(unsigned long)
-  0.00      0.05     0.00      101     0.00     0.00  Matrix::Matrix(Matrix const&)
-  0.00      0.05     0.00      100     0.00   494.74  World::evaluate_rules()
-  0.00      0.05     0.00      100     0.00     2.28  World::update_boundary()
-  0.00      0.05     0.00      100     0.00    90.96  conway::evaluate_rules(Matrix, Matrix&, Matrix&)
-  0.00      0.05     0.00      100     0.00     2.28  conway::update_boundary(Matrix&)
-  0.00      0.05     0.00      100     0.00   370.89  matrix::count_neighbours(Matrix&)
-  0.00      0.05     0.00       17     0.00     0.00  std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::_M_gen_rand()
-  0.00      0.05     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
-  0.00      0.05     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
-  0.00      0.05     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
-  0.00      0.05     0.00        1     0.00   154.89  World::World(Matrix)
-  0.00      0.05     0.00        1     0.00    32.89  World::~World()
-  0.00      0.05     0.00        1     0.00    56.37  Matrix::write_sub_matrix(Matrix&)
-  0.00      0.05     0.00        1     0.00    77.45  matrix::generate_matrix(int, int)
-  0.00      0.05     0.00        1     0.00     0.00  bool __gnu_cxx::__is_null_pointer<char const>(char const*)
-  0.00      0.05     0.00        1     0.00     0.00  std::char_traits<char>::length(char const*)
-  0.00      0.05     0.00        1     0.00     0.00  std::random_device::random_device()
-  0.00      0.05     0.00        1     0.00     0.00  std::random_device::~random_device()
-  0.00      0.05     0.00        1     0.00     0.00  std::random_device::operator()()
-  0.00      0.05     0.00        1     0.00     0.00  std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::seed(unsigned long)
-  0.00      0.05     0.00        1     0.00     0.00  std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::mersenne_twister_engine(unsigned long)
-  0.00      0.05     0.00        1     0.00     0.00  std::uniform_int_distribution<int>::param_type::param_type(int, int)
-  0.00      0.05     0.00        1     0.00     0.00  std::uniform_int_distribution<int>::uniform_int_distribution(int, int)
-  0.00      0.05     0.00        1     0.00     0.00  void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)
-  0.00      0.05     0.00        1     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&)
-  0.00      0.05     0.00        1     0.00     0.00  std::iterator_traits<char const*>::difference_type std::__distance<char const*>(char const*, char const*, std::random_access_iterator_tag)
-  0.00      0.05     0.00        1     0.00     0.00  std::iterator_traits<char const*>::iterator_category std::__iterator_category<char const*>(char const* const&)
-  0.00      0.05     0.00        1     0.00     0.00  std::iterator_traits<char const*>::difference_type std::distance<char const*>(char const*, char const*)
+ time   seconds   seconds    calls  ms/call  ms/call  name
+ 42.31      0.17     0.17 125307653     0.00     0.00  Matrix::operator()(int, int)
+ 12.82      0.21     0.05       10     5.00    19.34  matrix::count_neighbours(Matrix&)
+ 10.26      0.26     0.04       34     1.18     1.18  Matrix::~Matrix()
+ 10.26      0.29     0.04       10     4.00     8.23  conway::evaluate_rules(Matrix, Matrix&, Matrix&)
+  5.13      0.32     0.02  1000000     0.00     0.00  std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::operator()()
+  5.13      0.34     0.02        1    20.00    61.97  matrix::generate_matrix(int, int)
+  3.85      0.35     0.01       23     0.65     0.65  Matrix::Matrix(int, int)
+  2.56      0.36     0.01  1000000     0.00     0.00  int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&)
+  2.56      0.37     0.01     1603     0.01     0.01  std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::_M_gen_rand()
+  2.56      0.38     0.01       11     0.91     0.91  Matrix::Matrix(Matrix const&)
+  2.56      0.39     0.01        1    10.00    12.63  Matrix::write_sub_matrix(Matrix&)
+  0.00      0.39     0.00  2000000     0.00     0.00  std::uniform_int_distribution<int>::param_type::a() const
+  0.00      0.39     0.00  1000000     0.00     0.00  std::uniform_int_distribution<int>::param_type::b() const
+  0.00      0.39     0.00  1000000     0.00     0.00  unsigned int std::uniform_int_distribution<int>::_S_nd<unsigned long, std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>, unsigned int>(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, unsigned int)
+  0.00      0.39     0.00  1000000     0.00     0.00  int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&)
+  0.00      0.39     0.00      624     0.00     0.00  std::__detail::_Mod<unsigned long, 4294967296ul, 1ul, 0ul, true, true>::__calc(unsigned long)
+  0.00      0.39     0.00      624     0.00     0.00  unsigned long std::__detail::__mod<unsigned long, 4294967296ul, 1ul, 0ul>(unsigned long)
+  0.00      0.39     0.00      623     0.00     0.00  std::__detail::_Mod<unsigned long, 624ul, 1ul, 0ul, true, true>::__calc(unsigned long)
+  0.00      0.39     0.00      623     0.00     0.00  unsigned long std::__detail::__mod<unsigned long, 624ul, 1ul, 0ul>(unsigned long)
+  0.00      0.39     0.00       10     0.00    30.84  World::evaluate_rules()
+  0.00      0.39     0.00       10     0.00     0.01  World::update_boundary()
+  0.00      0.39     0.00       10     0.00     0.01  conway::update_boundary(Matrix&)
+  0.00      0.39     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.39     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.39     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)
+  0.00      0.39     0.00        1     0.00    13.94  World::World(Matrix)
+  0.00      0.39     0.00        1     0.00     2.35  World::~World()
+  0.00      0.39     0.00        1     0.00     0.00  bool __gnu_cxx::__is_null_pointer<char const>(char const*)
+  0.00      0.39     0.00        1     0.00     0.00  std::char_traits<char>::length(char const*)
+  0.00      0.39     0.00        1     0.00     0.00  std::random_device::random_device()
+  0.00      0.39     0.00        1     0.00     0.00  std::random_device::~random_device()
+  0.00      0.39     0.00        1     0.00     0.00  std::random_device::operator()()
+  0.00      0.39     0.00        1     0.00     0.00  std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::seed(unsigned long)
+  0.00      0.39     0.00        1     0.00     0.00  std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::mersenne_twister_engine(unsigned long)
+  0.00      0.39     0.00        1     0.00     0.00  std::uniform_int_distribution<int>::param_type::param_type(int, int)
+  0.00      0.39     0.00        1     0.00     0.00  std::uniform_int_distribution<int>::uniform_int_distribution(int, int)
+  0.00      0.39     0.00        1     0.00     0.00  void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)
+  0.00      0.39     0.00        1     0.00     0.00  std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&)
+  0.00      0.39     0.00        1     0.00     0.00  std::iterator_traits<char const*>::difference_type std::__distance<char const*>(char const*, char const*, std::random_access_iterator_tag)
+  0.00      0.39     0.00        1     0.00     0.00  std::iterator_traits<char const*>::iterator_category std::__iterator_category<char const*>(char const* const&)
+  0.00      0.39     0.00        1     0.00     0.00  std::iterator_traits<char const*>::difference_type std::distance<char const*>(char const*, char const*)
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -81,132 +81,132 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 4 byte(s) for 20.00% of 0.05 seconds
+granularity: each sample hit covers 4 byte(s) for 2.56% of 0.39 seconds
 
 index % time    self  children    called     name
                                                  <spontaneous>
-[1]    100.0    0.00    0.05                 main [1]
-                0.00    0.05     100/100         World::evaluate_rules() [2]
-                0.00    0.00     100/100         World::update_boundary() [8]
-                0.00    0.00       1/1           World::World(Matrix) [10]
-                0.00    0.00       1/1           matrix::generate_matrix(int, int) [11]
-                0.00    0.00       2/304         Matrix::~Matrix() [7]
-                0.00    0.00       1/1           World::~World() [13]
-                0.00    0.00       1/12417894     Matrix::operator()(int, int) [4]
-                0.00    0.00       1/101         Matrix::Matrix(Matrix const&) [30]
+[1]    100.0    0.00    0.39                 main [1]
+                0.00    0.31      10/10          World::evaluate_rules() [2]
+                0.02    0.04       1/1           matrix::generate_matrix(int, int) [6]
+                0.00    0.01       1/1           World::World(Matrix) [13]
+                0.00    0.00       2/34          Matrix::~Matrix() [9]
+                0.00    0.00       1/1           World::~World() [17]
+                0.00    0.00       1/11          Matrix::Matrix(Matrix const&) [16]
+                0.00    0.00      10/10          World::update_boundary() [18]
+                0.00    0.00       1/125307653     Matrix::operator()(int, int) [4]
 -----------------------------------------------
-                0.00    0.05     100/100         main [1]
-[2]     98.9    0.00    0.05     100         World::evaluate_rules() [2]
-                0.00    0.04     100/100         matrix::count_neighbours(Matrix&) [3]
-                0.00    0.01     100/100         conway::evaluate_rules(Matrix, Matrix&, Matrix&) [6]
-                0.00    0.00     200/304         Matrix::~Matrix() [7]
-                0.00    0.00     100/101         Matrix::Matrix(Matrix const&) [30]
+                0.00    0.31      10/10          main [1]
+[2]     79.1    0.00    0.31      10         World::evaluate_rules() [2]
+                0.05    0.14      10/10          matrix::count_neighbours(Matrix&) [3]
+                0.04    0.04      10/10          conway::evaluate_rules(Matrix, Matrix&, Matrix&) [5]
+                0.02    0.00      20/34          Matrix::~Matrix() [9]
+                0.01    0.00      10/11          Matrix::Matrix(Matrix const&) [16]
 -----------------------------------------------
-                0.00    0.04     100/100         World::evaluate_rules() [2]
-[3]     74.2    0.00    0.04     100         matrix::count_neighbours(Matrix&) [3]
-                0.03    0.00 9080000/12417894     Matrix::operator()(int, int) [4]
-                0.01    0.00     200/203         Matrix::Matrix(int, int) [5]
-                0.00    0.00     100/304         Matrix::~Matrix() [7]
+                0.05    0.14      10/10          World::evaluate_rules() [2]
+[3]     49.6    0.05    0.14      10         matrix::count_neighbours(Matrix&) [3]
+                0.12    0.00 90080000/125307653     Matrix::operator()(int, int) [4]
+                0.01    0.00      20/23          Matrix::Matrix(int, int) [12]
+                0.01    0.00      10/34          Matrix::~Matrix() [9]
 -----------------------------------------------
-                0.00    0.00       1/12417894     main [1]
-                0.00    0.00   10000/12417894     matrix::generate_matrix(int, int) [11]
-                0.00    0.00   20000/12417894     Matrix::write_sub_matrix(Matrix&) [12]
-                0.00    0.00   80800/12417894     conway::update_boundary(Matrix&) [9]
-                0.01    0.00 3227093/12417894     conway::evaluate_rules(Matrix, Matrix&, Matrix&) [6]
-                0.03    0.00 9080000/12417894     matrix::count_neighbours(Matrix&) [3]
-[4]     70.0    0.04    0.00 12417894         Matrix::operator()(int, int) [4]
+                0.00    0.00       1/125307653     main [1]
+                0.00    0.00   80080/125307653     conway::update_boundary(Matrix&) [19]
+                0.00    0.00 1000000/125307653     matrix::generate_matrix(int, int) [6]
+                0.00    0.00 2000000/125307653     Matrix::write_sub_matrix(Matrix&) [14]
+                0.04    0.00 32147572/125307653     conway::evaluate_rules(Matrix, Matrix&, Matrix&) [5]
+                0.12    0.00 90080000/125307653     matrix::count_neighbours(Matrix&) [3]
+[4]     42.3    0.17    0.00 125307653         Matrix::operator()(int, int) [4]
 -----------------------------------------------
-                0.00    0.00       1/203         matrix::generate_matrix(int, int) [11]
-                0.00    0.00       2/203         World::World(Matrix) [10]
-                0.01    0.00     200/203         matrix::count_neighbours(Matrix&) [3]
-[5]     20.0    0.01    0.00     203         Matrix::Matrix(int, int) [5]
+                0.04    0.04      10/10          World::evaluate_rules() [2]
+[5]     21.1    0.04    0.04      10         conway::evaluate_rules(Matrix, Matrix&, Matrix&) [5]
+                0.04    0.00 32147572/125307653     Matrix::operator()(int, int) [4]
 -----------------------------------------------
-                0.00    0.01     100/100         World::evaluate_rules() [2]
-[6]     18.2    0.00    0.01     100         conway::evaluate_rules(Matrix, Matrix&, Matrix&) [6]
-                0.01    0.00 3227093/12417894     Matrix::operator()(int, int) [4]
------------------------------------------------
-                0.00    0.00       2/304         main [1]
-                0.00    0.00       2/304         World::~World() [13]
-                0.00    0.00     100/304         matrix::count_neighbours(Matrix&) [3]
-                0.00    0.00     200/304         World::evaluate_rules() [2]
-[7]     10.0    0.01    0.00     304         Matrix::~Matrix() [7]
------------------------------------------------
-                0.00    0.00     100/100         main [1]
-[8]      0.5    0.00    0.00     100         World::update_boundary() [8]
-                0.00    0.00     100/100         conway::update_boundary(Matrix&) [9]
------------------------------------------------
-                0.00    0.00     100/100         World::update_boundary() [8]
-[9]      0.5    0.00    0.00     100         conway::update_boundary(Matrix&) [9]
-                0.00    0.00   80800/12417894     Matrix::operator()(int, int) [4]
------------------------------------------------
-                0.00    0.00       1/1           main [1]
-[10]     0.3    0.00    0.00       1         World::World(Matrix) [10]
-                0.00    0.00       2/203         Matrix::Matrix(int, int) [5]
-                0.00    0.00       1/1           Matrix::write_sub_matrix(Matrix&) [12]
------------------------------------------------
-                0.00    0.00       1/1           main [1]
-[11]     0.2    0.00    0.00       1         matrix::generate_matrix(int, int) [11]
-                0.00    0.00       1/203         Matrix::Matrix(int, int) [5]
-                0.00    0.00   10000/12417894     Matrix::operator()(int, int) [4]
-                0.00    0.00   10000/10000       int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&) [24]
+                0.02    0.04       1/1           main [1]
+[6]     15.9    0.02    0.04       1         matrix::generate_matrix(int, int) [6]
+                0.00    0.04 1000000/1000000     int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&) [7]
+                0.00    0.00 1000000/125307653     Matrix::operator()(int, int) [4]
+                0.00    0.00       1/23          Matrix::Matrix(int, int) [12]
                 0.00    0.00       1/1           std::random_device::random_device() [37]
                 0.00    0.00       1/1           std::random_device::operator()() [39]
                 0.00    0.00       1/1           std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::mersenne_twister_engine(unsigned long) [41]
                 0.00    0.00       1/1           std::uniform_int_distribution<int>::uniform_int_distribution(int, int) [43]
                 0.00    0.00       1/1           std::random_device::~random_device() [38]
 -----------------------------------------------
-                0.00    0.00       1/1           World::World(Matrix) [10]
-[12]     0.1    0.00    0.00       1         Matrix::write_sub_matrix(Matrix&) [12]
-                0.00    0.00   20000/12417894     Matrix::operator()(int, int) [4]
+                0.00    0.04 1000000/1000000     matrix::generate_matrix(int, int) [6]
+[7]     10.3    0.00    0.04 1000000         int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&) [7]
+                0.01    0.03 1000000/1000000     int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&) [8]
+-----------------------------------------------
+                0.01    0.03 1000000/1000000     int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&) [7]
+[8]     10.3    0.01    0.03 1000000         int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&) [8]
+                0.00    0.03 1000000/1000000     unsigned int std::uniform_int_distribution<int>::_S_nd<unsigned long, std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>, unsigned int>(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, unsigned int) [11]
+                0.00    0.00 2000000/2000000     std::uniform_int_distribution<int>::param_type::a() const [26]
+                0.00    0.00 1000000/1000000     std::uniform_int_distribution<int>::param_type::b() const [27]
+-----------------------------------------------
+                0.00    0.00       2/34          main [1]
+                0.00    0.00       2/34          World::~World() [17]
+                0.01    0.00      10/34          matrix::count_neighbours(Matrix&) [3]
+                0.02    0.00      20/34          World::evaluate_rules() [2]
+[9]     10.3    0.04    0.00      34         Matrix::~Matrix() [9]
+-----------------------------------------------
+                0.02    0.01 1000000/1000000     unsigned int std::uniform_int_distribution<int>::_S_nd<unsigned long, std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>, unsigned int>(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, unsigned int) [11]
+[10]     7.7    0.02    0.01 1000000         std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::operator()() [10]
+                0.01    0.00    1603/1603        std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::_M_gen_rand() [15]
+-----------------------------------------------
+                0.00    0.03 1000000/1000000     int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&) [8]
+[11]     7.7    0.00    0.03 1000000         unsigned int std::uniform_int_distribution<int>::_S_nd<unsigned long, std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>, unsigned int>(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, unsigned int) [11]
+                0.02    0.01 1000000/1000000     std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::operator()() [10]
+-----------------------------------------------
+                0.00    0.00       1/23          matrix::generate_matrix(int, int) [6]
+                0.00    0.00       2/23          World::World(Matrix) [13]
+                0.01    0.00      20/23          matrix::count_neighbours(Matrix&) [3]
+[12]     3.8    0.01    0.00      23         Matrix::Matrix(int, int) [12]
+-----------------------------------------------
+                0.00    0.01       1/1           main [1]
+[13]     3.6    0.00    0.01       1         World::World(Matrix) [13]
+                0.01    0.00       1/1           Matrix::write_sub_matrix(Matrix&) [14]
+                0.00    0.00       2/23          Matrix::Matrix(int, int) [12]
+-----------------------------------------------
+                0.01    0.00       1/1           World::World(Matrix) [13]
+[14]     3.2    0.01    0.00       1         Matrix::write_sub_matrix(Matrix&) [14]
+                0.00    0.00 2000000/125307653     Matrix::operator()(int, int) [4]
+-----------------------------------------------
+                0.01    0.00    1603/1603        std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::operator()() [10]
+[15]     2.6    0.01    0.00    1603         std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::_M_gen_rand() [15]
+-----------------------------------------------
+                0.00    0.00       1/11          main [1]
+                0.01    0.00      10/11          World::evaluate_rules() [2]
+[16]     2.6    0.01    0.00      11         Matrix::Matrix(Matrix const&) [16]
 -----------------------------------------------
                 0.00    0.00       1/1           main [1]
-[13]     0.1    0.00    0.00       1         World::~World() [13]
-                0.00    0.00       2/304         Matrix::~Matrix() [7]
+[17]     0.6    0.00    0.00       1         World::~World() [17]
+                0.00    0.00       2/34          Matrix::~Matrix() [9]
 -----------------------------------------------
-                0.00    0.00   20000/20000       int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&) [25]
-[20]     0.0    0.00    0.00   20000         std::uniform_int_distribution<int>::param_type::a() const [20]
+                0.00    0.00      10/10          main [1]
+[18]     0.0    0.00    0.00      10         World::update_boundary() [18]
+                0.00    0.00      10/10          conway::update_boundary(Matrix&) [19]
 -----------------------------------------------
-                0.00    0.00   10000/10000       int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&) [25]
-[21]     0.0    0.00    0.00   10000         std::uniform_int_distribution<int>::param_type::b() const [21]
+                0.00    0.00      10/10          World::update_boundary() [18]
+[19]     0.0    0.00    0.00      10         conway::update_boundary(Matrix&) [19]
+                0.00    0.00   80080/125307653     Matrix::operator()(int, int) [4]
 -----------------------------------------------
-                0.00    0.00   10000/10000       unsigned int std::uniform_int_distribution<int>::_S_nd<unsigned long, std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>, unsigned int>(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, unsigned int) [23]
-[22]     0.0    0.00    0.00   10000         std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::operator()() [22]
-                0.00    0.00      17/17          std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::_M_gen_rand() [31]
+                0.00    0.00 2000000/2000000     int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&) [8]
+[26]     0.0    0.00    0.00 2000000         std::uniform_int_distribution<int>::param_type::a() const [26]
 -----------------------------------------------
-                0.00    0.00   10000/10000       int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&) [25]
-[23]     0.0    0.00    0.00   10000         unsigned int std::uniform_int_distribution<int>::_S_nd<unsigned long, std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>, unsigned int>(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, unsigned int) [23]
-                0.00    0.00   10000/10000       std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::operator()() [22]
+                0.00    0.00 1000000/1000000     int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&) [8]
+[27]     0.0    0.00    0.00 1000000         std::uniform_int_distribution<int>::param_type::b() const [27]
 -----------------------------------------------
-                0.00    0.00   10000/10000       matrix::generate_matrix(int, int) [11]
-[24]     0.0    0.00    0.00   10000         int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&) [24]
-                0.00    0.00   10000/10000       int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&) [25]
------------------------------------------------
-                0.00    0.00   10000/10000       int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&) [24]
-[25]     0.0    0.00    0.00   10000         int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&) [25]
-                0.00    0.00   20000/20000       std::uniform_int_distribution<int>::param_type::a() const [20]
-                0.00    0.00   10000/10000       std::uniform_int_distribution<int>::param_type::b() const [21]
-                0.00    0.00   10000/10000       unsigned int std::uniform_int_distribution<int>::_S_nd<unsigned long, std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>, unsigned int>(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, unsigned int) [23]
------------------------------------------------
-                0.00    0.00     624/624         unsigned long std::__detail::__mod<unsigned long, 4294967296ul, 1ul, 0ul>(unsigned long) [27]
-[26]     0.0    0.00    0.00     624         std::__detail::_Mod<unsigned long, 4294967296ul, 1ul, 0ul, true, true>::__calc(unsigned long) [26]
+                0.00    0.00     624/624         unsigned long std::__detail::__mod<unsigned long, 4294967296ul, 1ul, 0ul>(unsigned long) [29]
+[28]     0.0    0.00    0.00     624         std::__detail::_Mod<unsigned long, 4294967296ul, 1ul, 0ul, true, true>::__calc(unsigned long) [28]
 -----------------------------------------------
                 0.00    0.00     624/624         std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::seed(unsigned long) [40]
-[27]     0.0    0.00    0.00     624         unsigned long std::__detail::__mod<unsigned long, 4294967296ul, 1ul, 0ul>(unsigned long) [27]
-                0.00    0.00     624/624         std::__detail::_Mod<unsigned long, 4294967296ul, 1ul, 0ul, true, true>::__calc(unsigned long) [26]
+[29]     0.0    0.00    0.00     624         unsigned long std::__detail::__mod<unsigned long, 4294967296ul, 1ul, 0ul>(unsigned long) [29]
+                0.00    0.00     624/624         std::__detail::_Mod<unsigned long, 4294967296ul, 1ul, 0ul, true, true>::__calc(unsigned long) [28]
 -----------------------------------------------
-                0.00    0.00     623/623         unsigned long std::__detail::__mod<unsigned long, 624ul, 1ul, 0ul>(unsigned long) [29]
-[28]     0.0    0.00    0.00     623         std::__detail::_Mod<unsigned long, 624ul, 1ul, 0ul, true, true>::__calc(unsigned long) [28]
+                0.00    0.00     623/623         unsigned long std::__detail::__mod<unsigned long, 624ul, 1ul, 0ul>(unsigned long) [31]
+[30]     0.0    0.00    0.00     623         std::__detail::_Mod<unsigned long, 624ul, 1ul, 0ul, true, true>::__calc(unsigned long) [30]
 -----------------------------------------------
                 0.00    0.00     623/623         std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::seed(unsigned long) [40]
-[29]     0.0    0.00    0.00     623         unsigned long std::__detail::__mod<unsigned long, 624ul, 1ul, 0ul>(unsigned long) [29]
-                0.00    0.00     623/623         std::__detail::_Mod<unsigned long, 624ul, 1ul, 0ul, true, true>::__calc(unsigned long) [28]
------------------------------------------------
-                0.00    0.00       1/101         main [1]
-                0.00    0.00     100/101         World::evaluate_rules() [2]
-[30]     0.0    0.00    0.00     101         Matrix::Matrix(Matrix const&) [30]
------------------------------------------------
-                0.00    0.00      17/17          std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::operator()() [22]
-[31]     0.0    0.00    0.00      17         std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::_M_gen_rand() [31]
+[31]     0.0    0.00    0.00     623         unsigned long std::__detail::__mod<unsigned long, 624ul, 1ul, 0ul>(unsigned long) [31]
+                0.00    0.00     623/623         std::__detail::_Mod<unsigned long, 624ul, 1ul, 0ul, true, true>::__calc(unsigned long) [30]
 -----------------------------------------------
                 0.00    0.00       1/1           _GLOBAL__sub_I__ZN6MatrixC2Eii [50]
 [32]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [32]
@@ -223,29 +223,29 @@ index % time    self  children    called     name
                 0.00    0.00       1/1           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [45]
 [36]     0.0    0.00    0.00       1         std::char_traits<char>::length(char const*) [36]
 -----------------------------------------------
-                0.00    0.00       1/1           matrix::generate_matrix(int, int) [11]
+                0.00    0.00       1/1           matrix::generate_matrix(int, int) [6]
 [37]     0.0    0.00    0.00       1         std::random_device::random_device() [37]
                 0.00    0.00       1/1           std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [45]
 -----------------------------------------------
-                0.00    0.00       1/1           matrix::generate_matrix(int, int) [11]
+                0.00    0.00       1/1           matrix::generate_matrix(int, int) [6]
 [38]     0.0    0.00    0.00       1         std::random_device::~random_device() [38]
 -----------------------------------------------
-                0.00    0.00       1/1           matrix::generate_matrix(int, int) [11]
+                0.00    0.00       1/1           matrix::generate_matrix(int, int) [6]
 [39]     0.0    0.00    0.00       1         std::random_device::operator()() [39]
 -----------------------------------------------
                 0.00    0.00       1/1           std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::mersenne_twister_engine(unsigned long) [41]
 [40]     0.0    0.00    0.00       1         std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::seed(unsigned long) [40]
-                0.00    0.00     624/624         unsigned long std::__detail::__mod<unsigned long, 4294967296ul, 1ul, 0ul>(unsigned long) [27]
-                0.00    0.00     623/623         unsigned long std::__detail::__mod<unsigned long, 624ul, 1ul, 0ul>(unsigned long) [29]
+                0.00    0.00     624/624         unsigned long std::__detail::__mod<unsigned long, 4294967296ul, 1ul, 0ul>(unsigned long) [29]
+                0.00    0.00     623/623         unsigned long std::__detail::__mod<unsigned long, 624ul, 1ul, 0ul>(unsigned long) [31]
 -----------------------------------------------
-                0.00    0.00       1/1           matrix::generate_matrix(int, int) [11]
+                0.00    0.00       1/1           matrix::generate_matrix(int, int) [6]
 [41]     0.0    0.00    0.00       1         std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::mersenne_twister_engine(unsigned long) [41]
                 0.00    0.00       1/1           std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::seed(unsigned long) [40]
 -----------------------------------------------
                 0.00    0.00       1/1           std::uniform_int_distribution<int>::uniform_int_distribution(int, int) [43]
 [42]     0.0    0.00    0.00       1         std::uniform_int_distribution<int>::param_type::param_type(int, int) [42]
 -----------------------------------------------
-                0.00    0.00       1/1           matrix::generate_matrix(int, int) [11]
+                0.00    0.00       1/1           matrix::generate_matrix(int, int) [6]
 [43]     0.0    0.00    0.00       1         std::uniform_int_distribution<int>::uniform_int_distribution(int, int) [43]
                 0.00    0.00       1/1           std::uniform_int_distribution<int>::param_type::param_type(int, int) [42]
 -----------------------------------------------
@@ -361,17 +361,17 @@ notice and this notice are preserved.
 
 Index by function name
 
-  [32] __static_initialization_and_destruction_0(int, int) [11] matrix::generate_matrix(int, int) [23] unsigned int std::uniform_int_distribution<int>::_S_nd<unsigned long, std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>, unsigned int>(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, unsigned int)
+  [32] __static_initialization_and_destruction_0(int, int) [6] matrix::generate_matrix(int, int) [11] unsigned int std::uniform_int_distribution<int>::_S_nd<unsigned long, std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>, unsigned int>(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, unsigned int)
   [33] __static_initialization_and_destruction_0(int, int) [3] matrix::count_neighbours(Matrix&) [43] std::uniform_int_distribution<int>::uniform_int_distribution(int, int)
-  [34] __static_initialization_and_destruction_0(int, int) [35] bool __gnu_cxx::__is_null_pointer<char const>(char const*) [24] int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&)
-   [2] World::evaluate_rules() [20] std::uniform_int_distribution<int>::param_type::a() const [25] int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&)
-   [8] World::update_boundary() [21] std::uniform_int_distribution<int>::param_type::b() const [44] void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)
-  [10] World::World(Matrix)   [36] std::char_traits<char>::length(char const*) [45] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&)
-  [13] World::~World()        [37] std::random_device::random_device() [26] std::__detail::_Mod<unsigned long, 4294967296ul, 1ul, 0ul, true, true>::__calc(unsigned long)
-  [12] Matrix::write_sub_matrix(Matrix&) [38] std::random_device::~random_device() [28] std::__detail::_Mod<unsigned long, 624ul, 1ul, 0ul, true, true>::__calc(unsigned long)
-  [30] Matrix::Matrix(Matrix const&) [39] std::random_device::operator()() [27] unsigned long std::__detail::__mod<unsigned long, 4294967296ul, 1ul, 0ul>(unsigned long)
-   [5] Matrix::Matrix(int, int) [31] std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::_M_gen_rand() [29] unsigned long std::__detail::__mod<unsigned long, 624ul, 1ul, 0ul>(unsigned long)
-   [7] Matrix::~Matrix()      [40] std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::seed(unsigned long) [46] std::iterator_traits<char const*>::difference_type std::__distance<char const*>(char const*, char const*, std::random_access_iterator_tag)
+  [34] __static_initialization_and_destruction_0(int, int) [35] bool __gnu_cxx::__is_null_pointer<char const>(char const*) [7] int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&)
+   [2] World::evaluate_rules() [26] std::uniform_int_distribution<int>::param_type::a() const [8] int std::uniform_int_distribution<int>::operator()<std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul> >(std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>&, std::uniform_int_distribution<int>::param_type const&)
+  [18] World::update_boundary() [27] std::uniform_int_distribution<int>::param_type::b() const [44] void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag)
+  [13] World::World(Matrix)   [36] std::char_traits<char>::length(char const*) [45] std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&)
+  [17] World::~World()        [37] std::random_device::random_device() [28] std::__detail::_Mod<unsigned long, 4294967296ul, 1ul, 0ul, true, true>::__calc(unsigned long)
+  [14] Matrix::write_sub_matrix(Matrix&) [38] std::random_device::~random_device() [30] std::__detail::_Mod<unsigned long, 624ul, 1ul, 0ul, true, true>::__calc(unsigned long)
+  [16] Matrix::Matrix(Matrix const&) [39] std::random_device::operator()() [29] unsigned long std::__detail::__mod<unsigned long, 4294967296ul, 1ul, 0ul>(unsigned long)
+  [12] Matrix::Matrix(int, int) [15] std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::_M_gen_rand() [31] unsigned long std::__detail::__mod<unsigned long, 624ul, 1ul, 0ul>(unsigned long)
+   [9] Matrix::~Matrix()      [40] std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::seed(unsigned long) [46] std::iterator_traits<char const*>::difference_type std::__distance<char const*>(char const*, char const*, std::random_access_iterator_tag)
    [4] Matrix::operator()(int, int) [41] std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::mersenne_twister_engine(unsigned long) [47] std::iterator_traits<char const*>::iterator_category std::__iterator_category<char const*>(char const* const&)
-   [6] conway::evaluate_rules(Matrix, Matrix&, Matrix&) [22] std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::operator()() [48] std::iterator_traits<char const*>::difference_type std::distance<char const*>(char const*, char const*)
-   [9] conway::update_boundary(Matrix&) [42] std::uniform_int_distribution<int>::param_type::param_type(int, int)
+   [5] conway::evaluate_rules(Matrix, Matrix&, Matrix&) [10] std::mersenne_twister_engine<unsigned long, 32ul, 624ul, 397ul, 31ul, 2567483615ul, 11ul, 4294967295ul, 7ul, 2636928640ul, 15ul, 4022730752ul, 18ul, 1812433253ul>::operator()() [48] std::iterator_traits<char const*>::difference_type std::distance<char const*>(char const*, char const*)
+  [19] conway::update_boundary(Matrix&) [42] std::uniform_int_distribution<int>::param_type::param_type(int, int)

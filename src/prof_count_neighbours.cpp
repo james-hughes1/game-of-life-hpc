@@ -9,7 +9,7 @@ int main() {
      * Life. \param A Input matrix.
      */
 
-    Matrix A = matrix::generate_matrix(1000, 1000);
+    Matrix A = matrix::generate_matrix(10000, 10000);
 
     int n_rows = A.n_rows;
     int n_cols = A.n_cols;

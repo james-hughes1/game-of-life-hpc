@@ -9,10 +9,10 @@ int main() {
      * Main procedure to run.
      */
 
-    Matrix random_seed = matrix::generate_matrix(100, 100);
+    Matrix random_seed = matrix::generate_matrix(1000, 1000);
     World RandomWorld(random_seed);
 
-    for (int age = 0; age < 100; age++) {
+    for (int age = 0; age < 10; age++) {
         RandomWorld.update_boundary();
         RandomWorld.evaluate_rules();
     }
