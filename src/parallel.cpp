@@ -10,25 +10,6 @@
 #include "conway/include/matrix.h"
 #include "conway/include/world.h"
 
-std::tuple<int, int> divide_rows(int rows, int size, int rank) {
-    int row_rank  = rows / size;
-    int auxrow    = rows % size;
-    int start_row = rank * row_rank;
-    int end_row   = (rank + 1) * row_rank;
-
-    // Allocate remainder across rows
-    if (auxrow != 0) {
-        if (rank < auxrow) {
-            start_row = start_row + rank;
-            end_row   = end_row + rank + 1;
-        } else {
-            start_row = start_row + auxrow;
-            end_row   = end_row + auxrow;
-        }
-    }
-    return std::make_tuple(start_row, end_row);
-}
-
 int main(int argc, char **argv) {
     /**
      * Main procedure to run.
@@ -64,14 +45,16 @@ int main(int argc, char **argv) {
 
     for (int r = 0; r < nranks; r++) {
         int row_start, row_end;
-        std::tie(row_start, row_end) = divide_rows(N_ROWS_TOTAL, nranks, r);
-        chunk_sizes[r]               = (row_end - row_start) * N_COLS_TOTAL;
-        offsets[r] = (r == 0) ? 0 : offsets[r - 1] + chunk_sizes[r - 1];
+        std::tie(row_start, row_end) =
+            conway::divide_rows(N_ROWS_TOTAL, nranks, r);
+        chunk_sizes[r] = (row_end - row_start) * N_COLS_TOTAL;
+        offsets[r]     = (r == 0) ? 0 : offsets[r - 1] + chunk_sizes[r - 1];
     }
 
     // Scatter seed
     int row_start, row_end;
-    std::tie(row_start, row_end) = divide_rows(N_ROWS_TOTAL, nranks, rank);
+    std::tie(row_start, row_end) =
+        conway::divide_rows(N_ROWS_TOTAL, nranks, rank);
     auto chunk_data = new int[(row_end - row_start) * N_COLS_TOTAL];
 
     MPI_Scatterv(full_data, chunk_sizes, offsets, MPI_INT, chunk_data,

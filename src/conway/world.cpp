@@ -116,3 +116,22 @@ int conway::update_boundary(Matrix &Cells_current) {
     }
     return 0;
 }
+
+std::tuple<int, int> conway::divide_rows(int rows, int size, int rank) {
+    int row_rank  = rows / size;
+    int auxrow    = rows % size;
+    int start_row = rank * row_rank;
+    int end_row   = (rank + 1) * row_rank;
+
+    // Allocate remainder across rows
+    if (auxrow != 0) {
+        if (rank < auxrow) {
+            start_row = start_row + rank;
+            end_row   = end_row + rank + 1;
+        } else {
+            start_row = start_row + auxrow;
+            end_row   = end_row + auxrow;
+        }
+    }
+    return std::make_tuple(start_row, end_row);
+}

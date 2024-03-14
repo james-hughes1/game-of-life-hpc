@@ -1,6 +1,8 @@
 #ifndef CONWAY_H
 #define CONWAY_H
 
+#include <tuple>
+
 #include "matrix.h"
 
 /**
@@ -29,6 +31,7 @@ namespace conway {
 int evaluate_rules(Matrix &Cells_count, Matrix &Cells_current,
                    Matrix &Cells_next);
 int update_boundary(Matrix &Cells);
+std::tuple<int, int> divide_rows(int rows, int size, int rank);
 }; // namespace conway
 
 #endif
