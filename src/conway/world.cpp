@@ -55,6 +55,34 @@ int World::display_world() {
     return 0;
 }
 
+int World::write_edge(int *edge, int loc) {
+    // loc==0 means write top, loc==1 means bottom.
+    if (age % 2 == 0) {
+        for (int j = 0; j < Cells_0.n_cols; j++) {
+            Cells_0(loc * (Cells_0.n_rows - 1), j) = edge[j];
+        }
+    } else {
+        for (int j = 0; j < Cells_1.n_cols; j++) {
+            Cells_1(loc * (Cells_1.n_rows - 1), j) = edge[j];
+        }
+    }
+    return 0;
+}
+
+int World::read_edge(int *edge, int loc) {
+    // loc==0 means write top, loc==1 means bottom.
+    if (age % 2 == 0) {
+        for (int j = 0; j < Cells_0.n_cols; j++) {
+            edge[j] = Cells_0(loc * (Cells_0.n_rows - 1), j);
+        }
+    } else {
+        for (int j = 0; j < Cells_1.n_cols; j++) {
+            edge[j] = Cells_1(loc * (Cells_1.n_rows - 1), j);
+        }
+    }
+    return 0;
+}
+
 int conway::evaluate_rules(Matrix &Cells_count, Matrix &Cells_current,
                            Matrix &Cells_next) {
     for (int i = 0; i < Cells_count.n_rows; i++) {

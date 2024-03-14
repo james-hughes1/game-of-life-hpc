@@ -21,12 +21,15 @@ class World {
     int display_world();
     int random_seed();
     Matrix output_cells();
+    int write_edge(int *edge, int loc);
+    int read_edge(int *edge, int loc);
 };
 
 namespace conway {
 int evaluate_rules(Matrix &Cells_count, Matrix &Cells_current,
                    Matrix &Cells_next);
 int update_boundary(Matrix &Cells);
+
 }; // namespace conway
 
 #endif
