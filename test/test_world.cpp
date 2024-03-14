@@ -35,9 +35,9 @@ TEST(World, EvaluateRules) {
     Matrix Cells_output(4, 5);
     Matrix Cells_count(4, 5);
     Cells_count(1, 1) = 3;
-    Cells_count(1, 2) = 3;
-    Cells_count(1, 3) = 4;
-    Cells_count(2, 1) = 1;
+    Cells_count(1, 2) = 4;
+    Cells_count(1, 3) = 5;
+    Cells_count(2, 1) = 2;
     Cells_count(2, 2) = 3;
     Cells_count(2, 3) = 4;
 

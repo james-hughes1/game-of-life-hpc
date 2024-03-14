@@ -103,16 +103,16 @@ TEST(Matrix, CountNeighboursValid) {
     Matrix Counts = matrix::count_neighbours(MATRIX_5);
     EXPECT_EQ(Counts.n_rows, 4);
     EXPECT_EQ(Counts.n_cols, 5);
-    EXPECT_EQ(Counts(1, 1), 56)
+    EXPECT_EQ(Counts(1, 1), 63)
         << "count_neighbours does not compute correct answers.";
-    EXPECT_EQ(Counts(1, 2), 64)
+    EXPECT_EQ(Counts(1, 2), 72)
         << "count_neighbours does not compute correct answers.";
-    EXPECT_EQ(Counts(1, 3), 72)
+    EXPECT_EQ(Counts(1, 3), 81)
         << "count_neighbours does not compute correct answers.";
-    EXPECT_EQ(Counts(2, 1), 96)
+    EXPECT_EQ(Counts(2, 1), 108)
         << "count_neighbours does not compute correct answers.";
-    EXPECT_EQ(Counts(2, 2), 104)
+    EXPECT_EQ(Counts(2, 2), 117)
         << "count_neighbours does not compute correct answers.";
-    EXPECT_EQ(Counts(2, 3), 112)
+    EXPECT_EQ(Counts(2, 3), 126)
         << "count_neighbours does not compute correct answers.";
 }

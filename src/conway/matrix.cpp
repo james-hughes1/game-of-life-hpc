@@ -182,7 +182,7 @@ Matrix matrix::count_neighbours(Matrix &A) {
     Matrix C(n_rows, n_cols);
     for (int i = 1; i < n_rows - 1; i++) {
         for (int j = 1; j < n_cols - 1; j++) {
-            C(i, j) = B(i - 1, j) + B(i, j) + B(i + 1, j) - A(i, j);
+            C(i, j) = B(i - 1, j) + B(i, j) + B(i + 1, j);
         }
     }
     return C;

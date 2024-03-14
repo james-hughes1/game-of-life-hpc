@@ -61,7 +61,7 @@ int conway::evaluate_rules(Matrix &Cells_count, Matrix &Cells_current,
         for (int j = 0; j < Cells_count.n_cols; j++) {
             Cells_next(i, j) =
                 (Cells_count(i, j) == 3) ||
-                ((Cells_count(i, j) == 2) && (Cells_current(i, j) == 1));
+                ((Cells_count(i, j) == 4) && (Cells_current(i, j) == 1));
         }
     }
     return 0;
