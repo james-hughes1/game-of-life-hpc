@@ -178,18 +178,11 @@ Matrix matrix::count_neighbours(Matrix &A) {
         }
     }
 
-    Matrix B_T(n_cols, n_rows);
-    for (int j = 0; j < n_cols; j++) {
-        for (int i = 0; i < n_rows; i++) {
-            B_T(j, i) = B(i, j);
-        }
-    }
-
     // Column convolution
     Matrix C(n_rows, n_cols);
     for (int i = 1; i < n_rows - 1; i++) {
         for (int j = 1; j < n_cols - 1; j++) {
-            C(i, j) = B_T(j, i - 1) + B_T(j, i) + B_T(j, i + 1) - A(i, j);
+            C(i, j) = B(i - 1, j) + B(i, j) + B(i + 1, j) - A(i, j);
         }
     }
     return C;
