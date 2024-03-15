@@ -7,8 +7,8 @@
 #include <string>
 #include <tuple>
 
-#include "conway/include/matrix.h"
-#include "conway/include/world.h"
+#include "matrix.h"
+#include "world.h"
 
 int main(int argc, char **argv) {
     /**
@@ -22,8 +22,8 @@ int main(int argc, char **argv) {
 
     MPI_Status status;
 
-    int N_ROWS_TOTAL = 11;
-    int N_COLS_TOTAL = 11;
+    int N_ROWS_TOTAL = 43;
+    int N_COLS_TOTAL = 17;
     int MAX_AGE      = 50;
 
     // RANKS_ROWS * RANKS_COLS == nranks
@@ -34,6 +34,7 @@ int main(int argc, char **argv) {
     // chunks.
     auto chunk_rows  = new int[RANKS_ROWS];
     auto offsets_row = new int[RANKS_ROWS];
+
     for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
         int row_start, row_end;
         std::tie(row_start, row_end) =
@@ -46,6 +47,7 @@ int main(int argc, char **argv) {
 
     auto chunk_cols  = new int[RANKS_COLS];
     auto offsets_col = new int[RANKS_COLS];
+
     for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
         int col_start, col_end;
         std::tie(col_start, col_end) =
@@ -56,9 +58,11 @@ int main(int argc, char **argv) {
                            : offsets_col[j_chunk - 1] + chunk_cols[j_chunk - 1];
     }
 
-    // Aggregate chunk dimensions into 'flat' sizes; same for offsets.
+    // Aggregate chunk dimensions into sizes; same for offsets.
+
     auto chunk_sizes = new int[nranks];
     auto offsets     = new int[nranks];
+
     for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
         for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
             chunk_sizes[i_chunk * RANKS_COLS + j_chunk] =
@@ -74,10 +78,10 @@ int main(int argc, char **argv) {
     // Write send buffer for full_data from seed, on rank 0
     auto full_data = new int[N_ROWS_TOTAL * N_COLS_TOTAL];
     if (rank == 0) {
-        Matrix seed =
-            matrix::read_matrix_str(matrix::read_file("seed_glider.txt"));
-        std::cout << "Seed " << MAX_AGE << ":\n"
-                  << matrix::write_matrix_str(seed) << std::endl;
+        std::string seed_str =
+            matrix::read_file("test/test_data/input_file_2.txt");
+        Matrix seed = matrix::read_matrix_str(seed_str);
+        std::cout << "Initial seed:\n" << matrix::write_matrix_str(seed);
         int full_data_idx = 0;
         for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
             for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
@@ -92,39 +96,33 @@ int main(int argc, char **argv) {
         }
     }
 
-    // Create 2D Topology;
-    MPI_Comm cartesian2d;
-    int dims[2]    = {RANKS_ROWS, RANKS_COLS};
-    int periods[2] = {1, 1};
-    int reorder    = 0;
-    MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, reorder, &cartesian2d);
-
-    // Get coords; note that these match rows and columns.
-    int coord2d[2];
-    MPI_Cart_coords(cartesian2d, rank, 2, coord2d);
-
-    // Assign markers to indicate which part of the world belongs to each rank.
-    int row_start = offsets_row[coord2d[0]];
-    int col_start = offsets_col[coord2d[1]];
-    int row_end = ((coord2d[0] + 1) != RANKS_ROWS) ? offsets_col[coord2d[0] + 1]
-                                                   : N_ROWS_TOTAL;
-    int col_end = ((coord2d[1] + 1) != RANKS_COLS) ? offsets_col[coord2d[1] + 1]
-                                                   : N_COLS_TOTAL;
-
-    // Scatter world across ranks.
+    // Scatter seed
+    int row_start, row_end;
+    std::tie(row_start, row_end) =
+        conway::divide_rows(N_ROWS_TOTAL, RANKS_ROWS, rank);
+    int col_start, col_end;
+    std::tie(col_start, col_end) =
+        conway::divide_rows(N_COLS_TOTAL, RANKS_COLS, rank);
     auto chunk_data = new int[(row_end - row_start) * (col_end - col_start)];
+
     MPI_Scatterv(full_data, chunk_sizes, offsets, MPI_INT, chunk_data,
                  (row_end - row_start) * (col_end - col_start), MPI_INT, 0,
                  MPI_COMM_WORLD);
 
-    // Abstract as a Matrix and then a World.
     Matrix seed_chunk = Matrix(row_end - row_start, col_end - col_start);
     for (int i = 0; i < (row_end - row_start); i++) {
         for (int j = 0; j < col_end - col_start; j++) {
             seed_chunk(i, j) = chunk_data[i * (col_end - col_start) + j];
         }
     }
+
     World WorldChunk(seed_chunk);
+
+    MPI_Comm cartesian2d;
+    int dims[2]    = {RANKS_ROWS, RANKS_COLS};
+    int periods[2] = {1, 1};
+    int reorder    = 0;
+    MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, reorder, &cartesian2d);
 
     // Get the adjacent ranks
     // Note that North is right as looking at the true world (East is down).
@@ -134,6 +132,8 @@ int main(int argc, char **argv) {
     MPI_Cart_shift(cartesian2d, 1, 1, &north, &south);
 
     // Get diagonal neighbours
+    int coord2d[2];
+    MPI_Cart_coords(cartesian2d, rank, 2, coord2d);
     const int coord_ne[2] = {coord2d[0] + 1, coord2d[1] + 1};
     const int coord_se[2] = {coord2d[0] + 1, coord2d[1] - 1};
     const int coord_sw[2] = {coord2d[0] - 1, coord2d[1] - 1};
@@ -147,6 +147,9 @@ int main(int argc, char **argv) {
     for (int age = 0; age < MAX_AGE; age++) {
         // Update within rank periodicity first.
         WorldChunk.update_boundary();
+
+        std::cout << rank << std::endl
+                  << matrix::write_matrix_str(WorldChunk.Cells_0) << std::endl;
 
         // Cycle edges
         auto right_edge = new int[row_end - row_start];
@@ -170,6 +173,7 @@ int main(int argc, char **argv) {
                              42, east, 42, MPI_COMM_WORLD, &status);
 
         // Cycle vertices
+
         int top_left = WorldChunk.read_vertex_2d(0);
         MPI_Sendrecv_replace(&top_left, 1, MPI_INT, northeast, 42, southwest,
                              42, MPI_COMM_WORLD, &status);
@@ -179,8 +183,11 @@ int main(int argc, char **argv) {
                              42, MPI_COMM_WORLD, &status);
 
         int bottom_right = WorldChunk.read_vertex_2d(2);
+        std::cout << rank << " : " << bottom_right << std::endl;
+        std::cout << rank << " : " << southwest << std::endl;
         MPI_Sendrecv_replace(&bottom_right, 1, MPI_INT, southwest, 42,
                              northeast, 42, MPI_COMM_WORLD, &status);
+        std::cout << rank << " : " << bottom_right << std::endl;
 
         int top_right = WorldChunk.read_vertex_2d(3);
         MPI_Sendrecv_replace(&top_right, 1, MPI_INT, southeast, 42, northwest,
@@ -195,6 +202,9 @@ int main(int argc, char **argv) {
         WorldChunk.write_vertex_2d(bottom_left, 1);
         WorldChunk.write_vertex_2d(bottom_right, 2);
         WorldChunk.write_vertex_2d(top_right, 3);
+
+        std::cout << rank << std::endl
+                  << matrix::write_matrix_str(WorldChunk.Cells_0) << std::endl;
 
         // Evaluate rules
         WorldChunk.evaluate_rules();
@@ -229,7 +239,7 @@ int main(int argc, char **argv) {
         }
 
         std::cout << "Final state at age " << MAX_AGE << ":\n"
-                  << matrix::write_matrix_str(final_state) << std::endl;
+                  << matrix::write_matrix_str(final_state);
     }
 
     MPI_Finalize();
