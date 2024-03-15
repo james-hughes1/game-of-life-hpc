@@ -22,9 +22,9 @@ int main(int argc, char **argv) {
 
     MPI_Status status;
 
-    int N_ROWS_TOTAL = 6;
-    int N_COLS_TOTAL = 6;
-    int MAX_AGE      = 1;
+    int N_ROWS_TOTAL = 12;
+    int N_COLS_TOTAL = 12;
+    int MAX_AGE      = 8;
 
     // RANKS_ROWS * RANKS_COLS == nranks
     int RANKS_ROWS = 2;
@@ -78,8 +78,8 @@ int main(int argc, char **argv) {
     // Write send buffer for full_data from seed, on rank 0
     auto full_data = new int[N_ROWS_TOTAL * N_COLS_TOTAL];
     if (rank == 0) {
-        Matrix seed = matrix::generate_matrix(N_ROWS_TOTAL, N_COLS_TOTAL);
-        std::cout << "Initial seed:\n" << matrix::write_matrix_str(seed);
+        Matrix seed =
+            matrix::read_matrix_str(matrix::read_file("seed_glider.txt"));
         int full_data_idx = 0;
         for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
             for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
@@ -154,25 +154,21 @@ int main(int argc, char **argv) {
         WorldChunk.read_edge_2d(right_edge, 3);
         MPI_Sendrecv_replace(right_edge, row_end - row_start, MPI_INT, south,
                              42, north, 42, MPI_COMM_WORLD, &status);
-        WorldChunk.write_edge_2d(right_edge, 3);
 
         auto left_edge = new int[row_end - row_start];
         WorldChunk.read_edge_2d(left_edge, 1);
         MPI_Sendrecv_replace(left_edge, row_end - row_start, MPI_INT, north, 42,
                              south, 42, MPI_COMM_WORLD, &status);
-        WorldChunk.write_edge_2d(left_edge, 1);
 
         auto top_edge = new int[col_end - col_start];
         WorldChunk.read_edge_2d(top_edge, 0);
         MPI_Sendrecv_replace(top_edge, col_end - col_start, MPI_INT, east, 42,
                              west, 42, MPI_COMM_WORLD, &status);
-        WorldChunk.write_edge_2d(top_edge, 0);
 
         auto bottom_edge = new int[col_end - col_start];
         WorldChunk.read_edge_2d(bottom_edge, 2);
         MPI_Sendrecv_replace(bottom_edge, col_end - col_start, MPI_INT, west,
                              42, east, 42, MPI_COMM_WORLD, &status);
-        WorldChunk.write_edge_2d(bottom_edge, 2);
 
         std::cout << rank << std::endl
                   << matrix::write_matrix_str(WorldChunk.Cells_0);
@@ -182,21 +178,27 @@ int main(int argc, char **argv) {
         int top_left = WorldChunk.read_vertex_2d(0);
         MPI_Sendrecv_replace(&top_left, 1, MPI_INT, northeast, 42, southwest,
                              42, MPI_COMM_WORLD, &status);
-        WorldChunk.write_vertex_2d(top_left, 0);
 
         int bottom_left = WorldChunk.read_vertex_2d(1);
         MPI_Sendrecv_replace(&bottom_left, 1, MPI_INT, northwest, 42, southeast,
                              42, MPI_COMM_WORLD, &status);
-        WorldChunk.write_vertex_2d(bottom_left, 1);
 
         int bottom_right = WorldChunk.read_vertex_2d(2);
         MPI_Sendrecv_replace(&bottom_right, 1, MPI_INT, southwest, 42,
                              northeast, 42, MPI_COMM_WORLD, &status);
-        WorldChunk.write_vertex_2d(bottom_right, 2);
 
         int top_right = WorldChunk.read_vertex_2d(3);
         MPI_Sendrecv_replace(&top_right, 1, MPI_INT, southeast, 42, northwest,
                              42, MPI_COMM_WORLD, &status);
+
+        // Updates
+        WorldChunk.write_edge_2d(right_edge, 3);
+        WorldChunk.write_edge_2d(left_edge, 1);
+        WorldChunk.write_edge_2d(top_edge, 0);
+        WorldChunk.write_edge_2d(bottom_edge, 2);
+        WorldChunk.write_vertex_2d(top_left, 0);
+        WorldChunk.write_vertex_2d(bottom_left, 1);
+        WorldChunk.write_vertex_2d(bottom_right, 2);
         WorldChunk.write_vertex_2d(top_right, 3);
 
         std::cout << rank << std::endl

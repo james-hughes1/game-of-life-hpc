@@ -142,12 +142,14 @@ int World::read_vertex_2d(int loc) {
     if (loc == 0) {
         vertex = (age % 2 == 0) ? Cells_0(0, 0) : Cells_1(0, 0);
     } else if (loc == 1) {
-        vertex = (age % 2 == 0) ? Cells_0(n_rows, 0) : Cells_1(n_rows, 0);
-    } else if (loc == 2) {
         vertex =
-            (age % 2 == 0) ? Cells_0(n_rows, n_cols) : Cells_1(n_rows, n_cols);
+            (age % 2 == 0) ? Cells_0(n_rows - 1, 0) : Cells_1(n_rows - 1, 0);
+    } else if (loc == 2) {
+        vertex = (age % 2 == 0) ? Cells_0(n_rows - 1, n_cols - 1)
+                                : Cells_1(n_rows - 1, n_cols - 1);
     } else {
-        vertex = (age % 2 == 0) ? Cells_0(0, n_cols) : Cells_1(0, n_cols);
+        vertex =
+            (age % 2 == 0) ? Cells_0(0, n_cols - 1) : Cells_1(0, n_cols - 1);
     }
     return vertex;
 }
