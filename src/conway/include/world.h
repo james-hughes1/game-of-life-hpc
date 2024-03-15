@@ -23,8 +23,8 @@ class World {
     int display_world();
     int random_seed();
     Matrix output_cells();
-    int write_edge(int *edge, int loc);
-    int read_edge(int *edge, int loc);
+    int write_edge_1d(int *edge, int loc);
+    int read_edge_1d(int *edge, int loc);
 };
 
 namespace conway {

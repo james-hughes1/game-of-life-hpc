@@ -78,10 +78,10 @@ int main(int argc, char **argv) {
         int rank_down = (rank + 1) % nranks;
 
         auto top_edge = new int[N_COLS_TOTAL + 2];
-        WorldChunk.read_edge(top_edge, 0);
+        WorldChunk.read_edge_1d(top_edge, 0);
 
         auto bottom_edge = new int[N_COLS_TOTAL + 2];
-        WorldChunk.read_edge(bottom_edge, 1);
+        WorldChunk.read_edge_1d(bottom_edge, 1);
 
         // Cycle edges
         MPI_Sendrecv_replace(top_edge, N_COLS_TOTAL + 2, MPI_INT, rank_down, 42,
@@ -90,8 +90,8 @@ int main(int argc, char **argv) {
                              42, rank_down, 42, MPI_COMM_WORLD, &status);
 
         // Write new boundaries from other ranks
-        WorldChunk.write_edge(top_edge, 0);
-        WorldChunk.write_edge(bottom_edge, 1);
+        WorldChunk.write_edge_1d(top_edge, 0);
+        WorldChunk.write_edge_1d(bottom_edge, 1);
 
         // Evaluate rules
         WorldChunk.evaluate_rules();

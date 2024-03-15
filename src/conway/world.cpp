@@ -55,7 +55,7 @@ int World::display_world() {
     return 0;
 }
 
-int World::write_edge(int *edge, int loc) {
+int World::write_edge_1d(int *edge, int loc) {
     // loc==0 means write top, loc==1 means bottom.
     if (age % 2 == 0) {
         for (int j = 0; j < Cells_0.n_cols; j++) {
@@ -69,7 +69,7 @@ int World::write_edge(int *edge, int loc) {
     return 0;
 }
 
-int World::read_edge(int *edge, int loc) {
+int World::read_edge_1d(int *edge, int loc) {
     // loc==0 means write top, loc==1 means bottom.
     if (age % 2 == 0) {
         for (int j = 0; j < Cells_0.n_cols; j++) {
