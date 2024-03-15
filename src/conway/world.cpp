@@ -83,6 +83,100 @@ int World::read_edge_1d(int *edge, int loc) {
     return 0;
 }
 
+int World::write_edge_2d(int *edge, int loc) {
+    // loc==0 means write top, then 1, 2, 3 go anti-clockwise round edges.
+    // Note that the 2d versions don't include vertices.
+    if (age % 2 == 0) {
+        if (loc % 2 == 0) {
+            for (int j = 1; j < n_cols - 1; j++) {
+                Cells_0(loc * (n_rows - 1), j) = edge[j];
+            }
+        } else {
+            for (int i = 1; i < n_rows - 1; i++) {
+                Cells_0(i, loc * (n_cols - 1)) = edge[i];
+            }
+        }
+    } else {
+        if (loc % 2 == 0) {
+            for (int j = 1; j < n_cols - 1; j++) {
+                Cells_1(loc * (n_rows - 1), j) = edge[j];
+            }
+        } else {
+            for (int i = 1; i < n_rows - 1; i++) {
+                Cells_1(i, loc * (n_cols - 1)) = edge[i];
+            }
+        }
+    }
+    return 0;
+}
+
+int World::read_edge_2d(int *edge, int loc) {
+    // loc==0 means write top, then 1, 2, 3 go anti-clockwise round edges.
+    // Note that the 2d versions don't include vertices.
+    if (age % 2 == 0) {
+        if (loc % 2 == 0) {
+            for (int j = 1; j < n_cols - 1; j++) {
+                edge[j] = Cells_0(loc * (n_rows - 1), j);
+            }
+        } else {
+            for (int i = 1; i < n_rows - 1; i++) {
+                edge[i] = Cells_0(i, loc * (n_cols - 1));
+            }
+        }
+    } else {
+        if (loc % 2 == 0) {
+            for (int j = 1; j < n_cols - 1; j++) {
+                edge[j] = Cells_1(loc * (n_rows - 1), j);
+            }
+        } else {
+            for (int i = 1; i < n_rows - 1; i++) {
+                edge[i] = Cells_1(i, loc * (n_cols - 1));
+            }
+        }
+    }
+    return 0;
+}
+int World::read_vertex_2d(int loc) {
+    // loc==0 means top-left corner, 1, 2, 3 go anti-clockwise.
+    int vertex;
+    if (loc == 0) {
+        vertex = (age % 2 == 0) ? Cells_0(0, 0) : Cells_1(0, 0);
+    } else if (loc == 1) {
+        vertex = (age % 2 == 0) ? Cells_0(n_rows, 0) : Cells_1(n_rows, 0);
+    } else if (loc == 2) {
+        vertex =
+            (age % 2 == 0) ? Cells_0(n_rows, n_cols) : Cells_1(n_rows, n_cols);
+    } else {
+        vertex = (age % 2 == 0) ? Cells_0(0, n_cols) : Cells_1(0, n_cols);
+    }
+    return vertex;
+}
+int World::write_vertex_2d(int vertex, int loc) {
+    // loc==0 means top-left corner, 1, 2, 3 go anti-clockwise.
+    if (age % 2 == 0) {
+        if (loc == 0) {
+            Cells_0(0, 0) = vertex;
+        } else if (loc == 1) {
+            Cells_0(n_rows, 0) = vertex;
+        } else if (loc == 2) {
+            Cells_0(n_rows, n_cols) = vertex;
+        } else if (loc == 3) {
+            Cells_0(0, n_cols) = vertex;
+        }
+    } else {
+        if (loc == 0) {
+            Cells_1(0, 0) = vertex;
+        } else if (loc == 1) {
+            Cells_1(n_rows, 0) = vertex;
+        } else if (loc == 2) {
+            Cells_1(n_rows, n_cols) = vertex;
+        } else if (loc == 3) {
+            Cells_1(0, n_cols) = vertex;
+        }
+    }
+    return 0;
+}
+
 int conway::evaluate_rules(Matrix &Cells_count, Matrix &Cells_current,
                            Matrix &Cells_next) {
     for (int i = 0; i < Cells_count.n_rows; i++) {

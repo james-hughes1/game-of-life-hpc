@@ -25,6 +25,10 @@ class World {
     Matrix output_cells();
     int write_edge_1d(int *edge, int loc);
     int read_edge_1d(int *edge, int loc);
+    int write_edge_2d(int *edge, int loc);
+    int read_edge_2d(int *edge, int loc);
+    int write_vertex_2d(int vertex, int loc);
+    int read_vertex_2d(int loc);
 };
 
 namespace conway {
