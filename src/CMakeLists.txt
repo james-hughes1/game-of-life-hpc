@@ -18,6 +18,11 @@ time_1d_decomp.cpp
 )
 ClangFormat(time_1d_decomp .)
 
+add_executable(parallel_2d
+parallel_2d.cpp
+)
+ClangFormat(parallel_2d .)
+
 target_link_libraries(main PRIVATE conway_lib)
 target_link_libraries(time_simulation PRIVATE conway_lib)
 target_link_libraries(time_simulation PRIVATE timing_lib)
@@ -27,7 +32,10 @@ target_link_libraries(parallel PRIVATE conway_lib)
 target_link_libraries(parallel PRIVATE timing_lib)
 target_link_libraries(time_1d_decomp PRIVATE conway_lib)
 target_link_libraries(time_1d_decomp PRIVATE timing_lib)
+target_link_libraries(parallel_2d PRIVATE conway_lib)
+target_link_libraries(parallel_2d PRIVATE timing_lib)
 
 find_package(MPI REQUIRED)
 target_link_libraries(parallel PUBLIC MPI::MPI_CXX)
 target_link_libraries(time_1d_decomp PUBLIC MPI::MPI_CXX)
+target_link_libraries(parallel_2d PUBLIC MPI::MPI_CXX)
