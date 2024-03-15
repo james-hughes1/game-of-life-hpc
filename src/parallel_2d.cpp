@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 
     int N_ROWS_TOTAL = 12;
     int N_COLS_TOTAL = 12;
-    int MAX_AGE      = 8;
+    int MAX_AGE      = 50;
 
     // RANKS_ROWS * RANKS_COLS == nranks
     int RANKS_ROWS = 2;
@@ -149,6 +149,9 @@ int main(int argc, char **argv) {
         // Update within rank periodicity first.
         WorldChunk.update_boundary();
 
+        std::cout << rank << std::endl
+                  << matrix::write_matrix_str(WorldChunk.Cells_0) << std::endl;
+
         // Cycle edges
         auto right_edge = new int[row_end - row_start];
         WorldChunk.read_edge_2d(right_edge, 3);
@@ -167,11 +170,13 @@ int main(int argc, char **argv) {
 
         auto bottom_edge = new int[col_end - col_start];
         WorldChunk.read_edge_2d(bottom_edge, 2);
+        std::cout << rank << " : " << bottom_edge[0] << bottom_edge[1]
+                  << bottom_edge[2] << std::endl;
+        std::cout << rank << " : " << west << std::endl;
         MPI_Sendrecv_replace(bottom_edge, col_end - col_start, MPI_INT, west,
                              42, east, 42, MPI_COMM_WORLD, &status);
-
-        std::cout << rank << std::endl
-                  << matrix::write_matrix_str(WorldChunk.Cells_0);
+        std::cout << rank << " : " << bottom_edge[0] << bottom_edge[1]
+                  << bottom_edge[2] << std::endl;
 
         // Cycle vertices
 
@@ -202,14 +207,11 @@ int main(int argc, char **argv) {
         WorldChunk.write_vertex_2d(top_right, 3);
 
         std::cout << rank << std::endl
-                  << matrix::write_matrix_str(WorldChunk.Cells_0);
+                  << matrix::write_matrix_str(WorldChunk.Cells_0) << std::endl;
 
         // Evaluate rules
         WorldChunk.evaluate_rules();
     }
-
-    std::cout << rank;
-    WorldChunk.display_world();
 
     // Gather worlds to rank 0.
     Matrix final_chunk = WorldChunk.output_cells();

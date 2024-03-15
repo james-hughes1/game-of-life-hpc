@@ -88,22 +88,22 @@ int World::write_edge_2d(int *edge, int loc) {
     // Note that the 2d versions don't include vertices.
     if (age % 2 == 0) {
         if (loc % 2 == 0) {
-            for (int j = 1; j < n_cols - 1; j++) {
-                Cells_0(loc * (n_rows - 1), j) = edge[j];
+            for (int j = 1; j < n_cols + 1; j++) {
+                Cells_0((loc / 2) * (n_rows + 1), j) = edge[j - 1];
             }
         } else {
-            for (int i = 1; i < n_rows - 1; i++) {
-                Cells_0(i, loc * (n_cols - 1)) = edge[i];
+            for (int i = 1; i < n_rows + 1; i++) {
+                Cells_0(i, (loc / 2) * (n_cols + 1)) = edge[i - 1];
             }
         }
     } else {
         if (loc % 2 == 0) {
-            for (int j = 1; j < n_cols - 1; j++) {
-                Cells_1(loc * (n_rows - 1), j) = edge[j];
+            for (int j = 1; j < n_cols + 1; j++) {
+                Cells_1((loc / 2) * (n_rows + 1), j) = edge[j - 1];
             }
         } else {
-            for (int i = 1; i < n_rows - 1; i++) {
-                Cells_1(i, loc * (n_cols - 1)) = edge[i];
+            for (int i = 1; i < n_rows + 1; i++) {
+                Cells_1(i, (loc / 2) * (n_cols + 1)) = edge[i - 1];
             }
         }
     }
@@ -115,22 +115,22 @@ int World::read_edge_2d(int *edge, int loc) {
     // Note that the 2d versions don't include vertices.
     if (age % 2 == 0) {
         if (loc % 2 == 0) {
-            for (int j = 1; j < n_cols - 1; j++) {
-                edge[j] = Cells_0(loc * (n_rows - 1), j);
+            for (int j = 1; j < n_cols + 1; j++) {
+                edge[j - 1] = Cells_0((loc / 2) * (n_rows + 1), j);
             }
         } else {
-            for (int i = 1; i < n_rows - 1; i++) {
-                edge[i] = Cells_0(i, loc * (n_cols - 1));
+            for (int i = 1; i < n_rows + 1; i++) {
+                edge[i - 1] = Cells_0(i, (loc / 2) * (n_cols + 1));
             }
         }
     } else {
         if (loc % 2 == 0) {
-            for (int j = 1; j < n_cols - 1; j++) {
-                edge[j] = Cells_1(loc * (n_rows - 1), j);
+            for (int j = 1; j < n_cols + 1; j++) {
+                edge[j - 1] = Cells_1((loc / 2) * (n_rows + 1), j);
             }
         } else {
-            for (int i = 1; i < n_rows - 1; i++) {
-                edge[i] = Cells_1(i, loc * (n_cols - 1));
+            for (int i = 1; i < n_rows + 1; i++) {
+                edge[i - 1] = Cells_1(i, (loc / 2) * (n_cols + 1));
             }
         }
     }
@@ -143,13 +143,13 @@ int World::read_vertex_2d(int loc) {
         vertex = (age % 2 == 0) ? Cells_0(0, 0) : Cells_1(0, 0);
     } else if (loc == 1) {
         vertex =
-            (age % 2 == 0) ? Cells_0(n_rows - 1, 0) : Cells_1(n_rows - 1, 0);
+            (age % 2 == 0) ? Cells_0(n_rows + 1, 0) : Cells_1(n_rows + 1, 0);
     } else if (loc == 2) {
-        vertex = (age % 2 == 0) ? Cells_0(n_rows - 1, n_cols - 1)
-                                : Cells_1(n_rows - 1, n_cols - 1);
+        vertex = (age % 2 == 0) ? Cells_0(n_rows + 1, n_cols + 1)
+                                : Cells_1(n_rows + 1, n_cols + 1);
     } else {
         vertex =
-            (age % 2 == 0) ? Cells_0(0, n_cols - 1) : Cells_1(0, n_cols - 1);
+            (age % 2 == 0) ? Cells_0(0, n_cols + 1) : Cells_1(0, n_cols + 1);
     }
     return vertex;
 }
