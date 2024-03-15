@@ -64,11 +64,14 @@ int evolve_omp(Matrix &cells_0, Matrix &cells_1) {
 }
 
 int main() {
+    omp_set_num_threads(4);
 
-    int N_ROWS  = 4000;
-    int N_COLS  = 4000;
-    int MAX_AGE = 50;
-    Matrix seed = matrix::generate_matrix(N_ROWS, N_COLS);
+    int N_ROWS           = 43;
+    int N_COLS           = 17;
+    int MAX_AGE          = 50;
+    std::string seed_str = matrix::read_file("test/test_data/input_file_2.txt");
+    Matrix seed          = matrix::read_matrix_str(seed_str);
+    std::cout << "Initial seed:\n" << matrix::write_matrix_str(seed);
 
     Matrix cells_0(N_ROWS + 2, N_COLS + 2);
     Matrix cells_1(N_ROWS + 2, N_COLS + 2);
@@ -87,10 +90,29 @@ int main() {
         age++;
     }
 
+    Matrix final_state(N_ROWS, N_COLS);
     if (age % 2 == 0) {
-        std::cout << "test " << cells_0(1, 1) << std::endl;
+        for (int i = 0; i < N_ROWS; i++) {
+            for (int j = 0; j < N_COLS; j++) {
+                final_state(i, j) = cells_0(i + 1, j + 1);
+            }
+        }
     } else {
-        std::cout << "test " << cells_1(1, 1) << std::endl;
+        for (int i = 0; i < N_ROWS; i++) {
+            for (int j = 0; j < N_COLS; j++) {
+                final_state(i, j) = cells_1(i + 1, j + 1);
+            }
+        }
+    }
+    std::cout << "Final state at age " << MAX_AGE << ":\n"
+              << matrix::write_matrix_str(final_state);
+    std::string expected_str =
+        matrix::read_file("test/test_data/output_file_2.txt");
+    Matrix expected_state = matrix::read_matrix_str(expected_str);
+    if (final_state == expected_state) {
+        std::cout << "Test passed." << std::endl;
+    } else {
+        std::cout << "Test failed." << std::endl;
     }
 
     return 0;
