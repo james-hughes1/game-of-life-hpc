@@ -1,7 +1,7 @@
 #include <iostream>
 #include <omp.h>
 
-#include "conway/include/matrix.h"
+#include "matrix.h"
 
 int update_boundary_omp(Matrix &cells_0) {
     // Update vertices

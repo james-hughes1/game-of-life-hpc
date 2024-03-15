@@ -28,6 +28,11 @@ time_2d_decomp.cpp
 )
 ClangFormat(time_2d_decomp .)
 
+add_executable(threading
+threading.cpp
+)
+ClangFormat(threading .)
+
 target_link_libraries(main PRIVATE conway_lib)
 target_link_libraries(time_simulation PRIVATE conway_lib)
 target_link_libraries(time_simulation PRIVATE timing_lib)
@@ -41,9 +46,16 @@ target_link_libraries(parallel_2d PRIVATE conway_lib)
 target_link_libraries(parallel_2d PRIVATE timing_lib)
 target_link_libraries(time_2d_decomp PRIVATE conway_lib)
 target_link_libraries(time_2d_decomp PRIVATE timing_lib)
+target_link_libraries(threading PRIVATE conway_lib)
+target_link_libraries(threading PRIVATE timing_lib)
 
 find_package(MPI REQUIRED)
 target_link_libraries(parallel PUBLIC MPI::MPI_CXX)
 target_link_libraries(time_1d_decomp PUBLIC MPI::MPI_CXX)
 target_link_libraries(parallel_2d PUBLIC MPI::MPI_CXX)
 target_link_libraries(time_2d_decomp PUBLIC MPI::MPI_CXX)
+
+find_package(OpenMP)
+target_link_libraries(threading PUBLIC OpenMP::OpenMP_CXX)
+
+target_compile_definitions(threading PRIVATE fopenmp O3 march=native)
