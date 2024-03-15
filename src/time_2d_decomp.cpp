@@ -2,13 +2,15 @@
  * \file main.cpp Main program file.
  */
 
+#include <fstream>
 #include <iostream>
 #include <mpi.h>
 #include <string>
 #include <tuple>
 
-#include "matrix.h"
-#include "world.h"
+#include "conway/include/matrix.h"
+#include "conway/include/world.h"
+#include "timing/include/timing.h"
 
 int main(int argc, char **argv) {
     /**
@@ -22,18 +24,24 @@ int main(int argc, char **argv) {
 
     MPI_Status status;
 
-    int N_ROWS_TOTAL = 43;
-    int N_COLS_TOTAL = 17;
-    int MAX_AGE      = 50;
+    std::fstream file;
+    double start_time = 0;
 
-    // RANKS_ROWS * RANKS_COLS == nranks
-    int RANKS_ROWS_LIST[3] = {1, 2, 4};
-    int RANKS_COLS_LIST[3] = {4, 2, 1};
+    if (rank == 0) {
+        std::string output_filename =
+            "prof/time_2d_decomp_" + std::to_string(nranks) + "rank.txt";
+        file.open(output_filename);
+    }
 
-    for (int topology_idx = 0; topology_idx < 3; topology_idx++) {
-        // Define layout of topology
-        int RANKS_ROWS = RANKS_ROWS_LIST[topology_idx];
-        int RANKS_COLS = RANKS_COLS_LIST[topology_idx];
+    for (int world_size = 100; world_size <= 4000; world_size += 100) {
+
+        int n_rows_total = world_size;
+        int n_cols_total = world_size;
+        int MAX_AGE      = 50;
+
+        // RANKS_ROWS * RANKS_COLS == nranks
+        int RANKS_ROWS = 2;
+        int RANKS_COLS = 2;
 
         // Split up rows and columns to enable proper ordering for full_data
         // into chunks.
@@ -42,7 +50,7 @@ int main(int argc, char **argv) {
         for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
             int row_start, row_end;
             std::tie(row_start, row_end) =
-                conway::divide_rows(N_ROWS_TOTAL, RANKS_ROWS, i_chunk);
+                conway::divide_rows(n_rows_total, RANKS_ROWS, i_chunk);
             chunk_rows[i_chunk]  = (row_end - row_start);
             offsets_row[i_chunk] = (i_chunk == 0) ? 0
                                                   : offsets_row[i_chunk - 1] +
@@ -54,7 +62,7 @@ int main(int argc, char **argv) {
         for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
             int col_start, col_end;
             std::tie(col_start, col_end) =
-                conway::divide_rows(N_COLS_TOTAL, RANKS_COLS, j_chunk);
+                conway::divide_rows(n_cols_total, RANKS_COLS, j_chunk);
             chunk_cols[j_chunk]  = (col_end - col_start);
             offsets_col[j_chunk] = (j_chunk == 0) ? 0
                                                   : offsets_col[j_chunk - 1] +
@@ -77,11 +85,9 @@ int main(int argc, char **argv) {
         }
 
         // Write send buffer for full_data from seed, on rank 0
-        auto full_data = new int[N_ROWS_TOTAL * N_COLS_TOTAL];
+        auto full_data = new int[n_rows_total * n_cols_total];
         if (rank == 0) {
-            std::string seed_str =
-                matrix::read_file("test/test_data/input_file_2.txt");
-            Matrix seed       = matrix::read_matrix_str(seed_str);
+            Matrix seed = matrix::generate_matrix(n_rows_total, n_cols_total);
             int full_data_idx = 0;
             for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
                 for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
@@ -106,10 +112,10 @@ int main(int argc, char **argv) {
         int col_start = offsets_col[coord2d[1]];
         int row_end   = ((coord2d[0] + 1) != RANKS_ROWS)
                             ? offsets_row[coord2d[0] + 1]
-                            : N_ROWS_TOTAL;
+                            : n_rows_total;
         int col_end   = ((coord2d[1] + 1) != RANKS_COLS)
                             ? offsets_col[coord2d[1] + 1]
-                            : N_COLS_TOTAL;
+                            : n_cols_total;
 
         // Scatter world across ranks.
         auto chunk_data =
@@ -215,7 +221,7 @@ int main(int argc, char **argv) {
 
         // Read back from full_data
         if (rank == 0) {
-            Matrix final_state(N_ROWS_TOTAL, N_COLS_TOTAL);
+            Matrix final_state(n_rows_total, n_cols_total);
             int full_data_idx = 0;
             for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
                 for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
@@ -229,17 +235,13 @@ int main(int argc, char **argv) {
                     }
                 }
             }
-            std::string expected_str =
-                matrix::read_file("test/test_data/output_file_2.txt");
-            Matrix expected_state = matrix::read_matrix_str(expected_str);
-            if (final_state == expected_state) {
-                std::cout << "Test passed; topology " << RANKS_ROWS << "x"
-                          << RANKS_COLS << std::endl;
-            } else {
-                std::cout << "Test failed; topology " << RANKS_ROWS << "x"
-                          << RANKS_COLS << std::endl;
-            }
+            file << n_rows_total << " " << n_cols_total << " " << MAX_AGE << " "
+                 << timing::get_split() - start_time << std::endl;
         }
+    }
+
+    if (rank == 0) {
+        file.close();
     }
 
     MPI_Finalize();

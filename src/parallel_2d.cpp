@@ -22,11 +22,12 @@ int main(int argc, char **argv) {
 
     MPI_Status status;
 
-    int N_ROWS_TOTAL = 7;
-    int N_COLS_TOTAL = 11;
-    int MAX_AGE      = 50;
+    int N_ROWS_TOTAL = 5;
+    int N_COLS_TOTAL = 7;
+    int MAX_AGE      = 1;
 
     // RANKS_ROWS * RANKS_COLS == nranks
+    // Defines the layout of the chunk topology.
     int RANKS_ROWS = 2;
     int RANKS_COLS = 2;
 
@@ -75,7 +76,8 @@ int main(int argc, char **argv) {
     auto full_data = new int[N_ROWS_TOTAL * N_COLS_TOTAL];
     if (rank == 0) {
         Matrix seed = matrix::generate_matrix(N_ROWS_TOTAL, N_COLS_TOTAL);
-        std::cout << "Initial seed:\n" << matrix::write_matrix_str(seed);
+        std::cout << "Initial seed:\n"
+                  << matrix::write_matrix_str(seed) << std::endl;
         int full_data_idx = 0;
         for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
             for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
@@ -90,16 +92,8 @@ int main(int argc, char **argv) {
         }
     }
 
-    // Create 2D Topology;
-    MPI_Comm cartesian2d;
-    int dims[2]    = {RANKS_ROWS, RANKS_COLS};
-    int periods[2] = {1, 1};
-    int reorder    = 0;
-    MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, reorder, &cartesian2d);
-
-    // Get coords; note that these match rows and columns.
-    int coord2d[2];
-    MPI_Cart_coords(cartesian2d, rank, 2, coord2d);
+    // Create coords; note that these match rows and columns.
+    int coord2d[2] = {rank / RANKS_COLS, rank % RANKS_COLS};
 
     // Assign markers to indicate which part of the world belongs to each rank.
     int row_start = offsets_row[coord2d[0]];
@@ -124,23 +118,26 @@ int main(int argc, char **argv) {
     }
     World WorldChunk(seed_chunk);
 
-    // Get the adjacent ranks
-    // Note that North is right as looking at the true world (East is down).
-    // To head north, increase second MPI topology coordinate.
-    int west, east, north, south;
-    MPI_Cart_shift(cartesian2d, 0, 1, &west, &east);
-    MPI_Cart_shift(cartesian2d, 1, 1, &north, &south);
+    // Find adjacent ranks
+    int up =
+        ((coord2d[0] + RANKS_ROWS - 1) % RANKS_ROWS) * RANKS_COLS + coord2d[1];
+    int down = ((coord2d[0] + 1) % RANKS_ROWS) * RANKS_COLS + coord2d[1];
+    int left =
+        coord2d[0] * RANKS_COLS + ((coord2d[1] + RANKS_COLS - 1) % RANKS_COLS);
+    int right = coord2d[0] * RANKS_COLS + ((coord2d[1] + 1) % RANKS_COLS);
 
     // Get diagonal neighbours
-    const int coord_ne[2] = {coord2d[0] + 1, coord2d[1] + 1};
-    const int coord_se[2] = {coord2d[0] + 1, coord2d[1] - 1};
-    const int coord_sw[2] = {coord2d[0] - 1, coord2d[1] - 1};
-    const int coord_nw[2] = {coord2d[0] - 1, coord2d[1] + 1};
-    int northeast, southeast, southwest, northwest;
-    MPI_Cart_rank(cartesian2d, coord_ne, &northeast);
-    MPI_Cart_rank(cartesian2d, coord_se, &southeast);
-    MPI_Cart_rank(cartesian2d, coord_sw, &southwest);
-    MPI_Cart_rank(cartesian2d, coord_nw, &northwest);
+    int upright = ((coord2d[0] + RANKS_ROWS - 1) % RANKS_ROWS) * RANKS_COLS +
+                  ((coord2d[1] + 1) % RANKS_COLS);
+    int downright = ((coord2d[0] + 1) % RANKS_ROWS) * RANKS_COLS +
+                    ((coord2d[1] + 1) % RANKS_COLS);
+    int downleft = ((coord2d[0] + 1) % RANKS_ROWS) * RANKS_COLS +
+                   ((coord2d[1] + RANKS_COLS - 1) % RANKS_COLS);
+    int upleft = ((coord2d[0] + RANKS_ROWS - 1) % RANKS_ROWS) * RANKS_COLS +
+                 ((coord2d[1] + RANKS_COLS - 1) % RANKS_COLS);
+
+    std::cout << "Rank " << rank << " topology coords: (" << coord2d[0] << ","
+              << coord2d[1] << ")" << std::endl;
 
     for (int age = 0; age < MAX_AGE; age++) {
         // Update within rank periodicity first.
@@ -149,40 +146,40 @@ int main(int argc, char **argv) {
         // Cycle edges
         auto right_edge = new int[row_end - row_start];
         WorldChunk.read_edge_2d(right_edge, 3);
-        MPI_Sendrecv_replace(right_edge, row_end - row_start, MPI_INT, south,
-                             42, north, 42, MPI_COMM_WORLD, &status);
+        MPI_Sendrecv_replace(right_edge, row_end - row_start, MPI_INT, left, 42,
+                             right, 42, MPI_COMM_WORLD, &status);
 
         auto left_edge = new int[row_end - row_start];
         WorldChunk.read_edge_2d(left_edge, 1);
-        MPI_Sendrecv_replace(left_edge, row_end - row_start, MPI_INT, north, 42,
-                             south, 42, MPI_COMM_WORLD, &status);
+        MPI_Sendrecv_replace(left_edge, row_end - row_start, MPI_INT, right, 42,
+                             left, 42, MPI_COMM_WORLD, &status);
 
         auto top_edge = new int[col_end - col_start];
         WorldChunk.read_edge_2d(top_edge, 0);
-        MPI_Sendrecv_replace(top_edge, col_end - col_start, MPI_INT, east, 42,
-                             west, 42, MPI_COMM_WORLD, &status);
+        MPI_Sendrecv_replace(top_edge, col_end - col_start, MPI_INT, down, 42,
+                             up, 42, MPI_COMM_WORLD, &status);
 
         auto bottom_edge = new int[col_end - col_start];
         WorldChunk.read_edge_2d(bottom_edge, 2);
-        MPI_Sendrecv_replace(bottom_edge, col_end - col_start, MPI_INT, west,
-                             42, east, 42, MPI_COMM_WORLD, &status);
+        MPI_Sendrecv_replace(bottom_edge, col_end - col_start, MPI_INT, up, 42,
+                             down, 42, MPI_COMM_WORLD, &status);
 
         // Cycle vertices
         int top_left = WorldChunk.read_vertex_2d(0);
-        MPI_Sendrecv_replace(&top_left, 1, MPI_INT, northeast, 42, southwest,
-                             42, MPI_COMM_WORLD, &status);
+        MPI_Sendrecv_replace(&top_left, 1, MPI_INT, downright, 42, upleft, 42,
+                             MPI_COMM_WORLD, &status);
 
         int bottom_left = WorldChunk.read_vertex_2d(1);
-        MPI_Sendrecv_replace(&bottom_left, 1, MPI_INT, northwest, 42, southeast,
+        MPI_Sendrecv_replace(&bottom_left, 1, MPI_INT, upright, 42, downleft,
                              42, MPI_COMM_WORLD, &status);
 
         int bottom_right = WorldChunk.read_vertex_2d(2);
-        MPI_Sendrecv_replace(&bottom_right, 1, MPI_INT, southwest, 42,
-                             northeast, 42, MPI_COMM_WORLD, &status);
+        MPI_Sendrecv_replace(&bottom_right, 1, MPI_INT, upleft, 42, downright,
+                             42, MPI_COMM_WORLD, &status);
 
         int top_right = WorldChunk.read_vertex_2d(3);
-        MPI_Sendrecv_replace(&top_right, 1, MPI_INT, southeast, 42, northwest,
-                             42, MPI_COMM_WORLD, &status);
+        MPI_Sendrecv_replace(&top_right, 1, MPI_INT, downleft, 42, upright, 42,
+                             MPI_COMM_WORLD, &status);
 
         // Updates
         WorldChunk.write_edge_2d(right_edge, 3);
@@ -226,9 +223,8 @@ int main(int argc, char **argv) {
             }
         }
         std::cout << "Final state at age " << MAX_AGE << ":\n"
-                  << matrix::write_matrix_str(final_state);
+                  << matrix::write_matrix_str(final_state) << std::endl;
     }
 
     MPI_Finalize();
-    return 0;
 }
