@@ -22,9 +22,9 @@ int main(int argc, char **argv) {
 
     MPI_Status status;
 
-    int N_ROWS_TOTAL = 12;
-    int N_COLS_TOTAL = 12;
-    int MAX_AGE      = 50;
+    int N_ROWS_TOTAL = 4;
+    int N_COLS_TOTAL = 6;
+    int MAX_AGE      = 1;
 
     // RANKS_ROWS * RANKS_COLS == nranks
     int RANKS_ROWS = 2;
@@ -78,8 +78,9 @@ int main(int argc, char **argv) {
     // Write send buffer for full_data from seed, on rank 0
     auto full_data = new int[N_ROWS_TOTAL * N_COLS_TOTAL];
     if (rank == 0) {
-        Matrix seed =
-            matrix::read_matrix_str(matrix::read_file("seed_glider.txt"));
+        Matrix seed = matrix::generate_matrix(N_ROWS_TOTAL, N_COLS_TOTAL);
+        std::cout << "Seed " << MAX_AGE << ":\n"
+                  << matrix::write_matrix_str(seed);
         int full_data_idx = 0;
         for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
             for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
@@ -113,9 +114,6 @@ int main(int argc, char **argv) {
             seed_chunk(i, j) = chunk_data[i * (col_end - col_start) + j];
         }
     }
-
-    std::cout << rank << std::endl
-              << matrix::write_matrix_str(seed_chunk) << std::endl;
 
     World WorldChunk(seed_chunk);
 
@@ -170,13 +168,8 @@ int main(int argc, char **argv) {
 
         auto bottom_edge = new int[col_end - col_start];
         WorldChunk.read_edge_2d(bottom_edge, 2);
-        std::cout << rank << " : " << bottom_edge[0] << bottom_edge[1]
-                  << bottom_edge[2] << std::endl;
-        std::cout << rank << " : " << west << std::endl;
         MPI_Sendrecv_replace(bottom_edge, col_end - col_start, MPI_INT, west,
                              42, east, 42, MPI_COMM_WORLD, &status);
-        std::cout << rank << " : " << bottom_edge[0] << bottom_edge[1]
-                  << bottom_edge[2] << std::endl;
 
         // Cycle vertices
 
@@ -189,8 +182,11 @@ int main(int argc, char **argv) {
                              42, MPI_COMM_WORLD, &status);
 
         int bottom_right = WorldChunk.read_vertex_2d(2);
+        std::cout << rank << " : " << bottom_right << std::endl;
+        std::cout << rank << " : " << southwest << std::endl;
         MPI_Sendrecv_replace(&bottom_right, 1, MPI_INT, southwest, 42,
                              northeast, 42, MPI_COMM_WORLD, &status);
+        std::cout << rank << " : " << bottom_right << std::endl;
 
         int top_right = WorldChunk.read_vertex_2d(3);
         MPI_Sendrecv_replace(&top_right, 1, MPI_INT, southeast, 42, northwest,

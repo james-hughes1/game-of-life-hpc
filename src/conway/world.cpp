@@ -159,21 +159,21 @@ int World::write_vertex_2d(int vertex, int loc) {
         if (loc == 0) {
             Cells_0(0, 0) = vertex;
         } else if (loc == 1) {
-            Cells_0(n_rows, 0) = vertex;
+            Cells_0(n_rows + 1, 0) = vertex;
         } else if (loc == 2) {
-            Cells_0(n_rows, n_cols) = vertex;
+            Cells_0(n_rows + 1, n_cols + 1) = vertex;
         } else if (loc == 3) {
-            Cells_0(0, n_cols) = vertex;
+            Cells_0(0, n_cols + 1) = vertex;
         }
     } else {
         if (loc == 0) {
             Cells_1(0, 0) = vertex;
         } else if (loc == 1) {
-            Cells_1(n_rows, 0) = vertex;
+            Cells_1(n_rows + 1, 0) = vertex;
         } else if (loc == 2) {
-            Cells_1(n_rows, n_cols) = vertex;
+            Cells_1(n_rows + 1, n_cols + 1) = vertex;
         } else if (loc == 3) {
-            Cells_1(0, n_cols) = vertex;
+            Cells_1(0, n_cols + 1) = vertex;
         }
     }
     return 0;
