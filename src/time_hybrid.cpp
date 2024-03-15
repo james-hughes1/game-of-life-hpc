@@ -1,16 +1,74 @@
-/**
- * \file main.cpp Main program file.
- */
-
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <mpi.h>
+#include <omp.h>
 #include <string>
 #include <tuple>
 
 #include "conway/include/matrix.h"
 #include "conway/include/world.h"
 #include "timing/include/timing.h"
+
+int update_boundary_omp(Matrix &cells_0) {
+    // Update vertices
+    cells_0(cells_0.n_rows - 1, cells_0.n_cols - 1) = cells_0(1, 1);
+    cells_0(0, cells_0.n_cols - 1) = cells_0(cells_0.n_rows - 2, 1);
+    cells_0(0, 0) = cells_0(cells_0.n_rows - 2, cells_0.n_cols - 2);
+    cells_0(cells_0.n_rows - 1, 0) = cells_0(1, cells_0.n_cols - 2);
+    // Update Edges
+
+#pragma omp parallel for
+    for (int j = 1; j < cells_0.n_cols - 1; j++) {
+        cells_0(0, j)                  = cells_0(cells_0.n_rows - 2, j);
+        cells_0(cells_0.n_rows - 1, j) = cells_0(1, j);
+    }
+
+#pragma omp parallel for
+    for (int i = 1; i < cells_0.n_rows - 1; i++) {
+        cells_0(i, 0)                  = cells_0(i, cells_0.n_cols - 2);
+        cells_0(i, cells_0.n_cols - 1) = cells_0(i, 1);
+    }
+    return 0;
+}
+
+int evolve_omp(Matrix &cells_0, Matrix &cells_1) {
+    int n_rows = cells_0.n_rows;
+    int n_cols = cells_0.n_cols;
+    Matrix row_convolution(n_rows, n_cols);
+    Matrix counts(n_rows, n_cols);
+#pragma omp parallel for
+    // Row convolution
+    for (int i = 0; i < n_rows; i++) {
+        for (int j = 1; j < n_cols - 1; j++) {
+            row_convolution(i, j) =
+                cells_0(i, j - 1) + cells_0(i, j) + cells_0(i, j + 1);
+        }
+    }
+
+#pragma omp barrier
+
+#pragma omp parallel for
+    // Column convolution
+    for (int i = 1; i < n_rows - 1; i++) {
+        for (int j = 1; j < n_cols - 1; j++) {
+            counts(i, j) = row_convolution(i - 1, j) + row_convolution(i, j) +
+                           row_convolution(i + 1, j);
+        }
+    }
+
+#pragma omp barrier
+
+#pragma omp parallel for
+    // Evaluate rules
+    for (int i = 0; i < n_rows; i++) {
+        for (int j = 0; j < n_cols; j++) {
+            cells_1(i, j) = (counts(i, j) == 3) ||
+                            ((counts(i, j) == 4) && (cells_0(i, j) == 1));
+        }
+    }
+    return 0;
+}
 
 int main(int argc, char **argv) {
     /**
@@ -24,12 +82,23 @@ int main(int argc, char **argv) {
 
     MPI_Status status;
 
+    int global_num_threads;
+#pragma omp parallel
+    {
+        int thread_id = omp_get_thread_num();
+        if (thread_id == 0) {
+            global_num_threads = omp_get_num_threads();
+        }
+    }
+
     std::fstream file;
     double start_time = 0;
 
     if (rank == 0) {
         std::string output_filename =
-            "prof/time_2d_decomp_" + std::to_string(nranks) + "rank.txt";
+            "prof/time_hybrid_r" + std::to_string(nranks) + "_t" +
+            std::to_string(global_num_threads) + ".txt";
+        std::cout << "Writing results to... " << output_filename << std::endl;
         file.open(output_filename);
     }
 
@@ -37,11 +106,13 @@ int main(int argc, char **argv) {
 
         int n_rows_total = world_size;
         int n_cols_total = world_size;
-        int MAX_AGE      = 50;
+        int MAX_AGE      = 1000;
 
         // RANKS_ROWS * RANKS_COLS == nranks
-        int RANKS_ROWS = 2;
-        int RANKS_COLS = 2;
+        // Defines the layout of the chunk topology.
+        // Note; we assume a square number of threads here.
+        int RANKS_ROWS = std::sqrt(nranks);
+        int RANKS_COLS = std::sqrt(nranks);
 
         // Split up rows and columns to enable proper ordering for full_data
         // into chunks.
@@ -156,7 +227,11 @@ int main(int argc, char **argv) {
 
         for (int age = 0; age < MAX_AGE; age++) {
             // Update within rank periodicity first.
-            WorldChunk.update_boundary();
+            if (age % 2 == 0) {
+                update_boundary_omp(WorldChunk.Cells_0);
+            } else {
+                update_boundary_omp(WorldChunk.Cells_1);
+            }
 
             // Cycle edges
             auto right_edge = new int[row_end - row_start];
@@ -206,8 +281,13 @@ int main(int argc, char **argv) {
             WorldChunk.write_vertex_2d(bottom_right, 2);
             WorldChunk.write_vertex_2d(top_right, 3);
 
-            // Evaluate rules
-            WorldChunk.evaluate_rules();
+            // Evolve (convolution & rules logic)
+            if (age % 2 == 0) {
+                evolve_omp(WorldChunk.Cells_0, WorldChunk.Cells_1);
+            } else {
+                evolve_omp(WorldChunk.Cells_1, WorldChunk.Cells_0);
+            }
+            WorldChunk.age++;
         }
 
         // Gather worlds to rank 0.
@@ -242,10 +322,5 @@ int main(int argc, char **argv) {
         }
     }
 
-    if (rank == 0) {
-        file.close();
-    }
-
     MPI_Finalize();
-    return 0;
 }

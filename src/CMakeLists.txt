@@ -33,6 +33,16 @@ threading.cpp
 )
 ClangFormat(threading .)
 
+add_executable(hybrid
+hybrid.cpp
+)
+ClangFormat(hybrid .)
+
+add_executable(time_hybrid
+time_hybrid.cpp
+)
+ClangFormat(time_hybrid .)
+
 target_link_libraries(main PRIVATE conway_lib)
 target_link_libraries(time_simulation PRIVATE conway_lib)
 target_link_libraries(time_simulation PRIVATE timing_lib)
@@ -48,14 +58,24 @@ target_link_libraries(time_2d_decomp PRIVATE conway_lib)
 target_link_libraries(time_2d_decomp PRIVATE timing_lib)
 target_link_libraries(threading PRIVATE conway_lib)
 target_link_libraries(threading PRIVATE timing_lib)
+target_link_libraries(hybrid PRIVATE conway_lib)
+target_link_libraries(hybrid PRIVATE timing_lib)
+target_link_libraries(time_hybrid PRIVATE conway_lib)
+target_link_libraries(time_hybrid PRIVATE timing_lib)
 
 find_package(MPI REQUIRED)
 target_link_libraries(parallel PUBLIC MPI::MPI_CXX)
 target_link_libraries(time_1d_decomp PUBLIC MPI::MPI_CXX)
 target_link_libraries(parallel_2d PUBLIC MPI::MPI_CXX)
 target_link_libraries(time_2d_decomp PUBLIC MPI::MPI_CXX)
+target_link_libraries(hybrid PUBLIC MPI::MPI_CXX)
+target_link_libraries(time_hybrid PUBLIC MPI::MPI_CXX)
 
 find_package(OpenMP)
 target_link_libraries(threading PUBLIC OpenMP::OpenMP_CXX)
+target_link_libraries(hybrid PUBLIC OpenMP::OpenMP_CXX)
+target_link_libraries(time_hybrid PUBLIC OpenMP::OpenMP_CXX)
 
 target_compile_definitions(threading PRIVATE fopenmp O3 march=native)
+target_compile_definitions(hybrid PRIVATE fopenmp O3 march=native)
+target_compile_definitions(time_hybrid PRIVATE fopenmp O3 march=native)
