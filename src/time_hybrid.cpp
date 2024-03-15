@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
 
         int n_rows_total = world_size;
         int n_cols_total = world_size;
-        int MAX_AGE      = 1000;
+        int MAX_AGE      = 200;
 
         // RANKS_ROWS * RANKS_COLS == nranks
         // Defines the layout of the chunk topology.
