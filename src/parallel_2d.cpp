@@ -7,8 +7,8 @@
 #include <string>
 #include <tuple>
 
-#include "conway/include/matrix.h"
-#include "conway/include/world.h"
+#include "matrix.h"
+#include "world.h"
 
 int main(int argc, char **argv) {
     /**
@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
 
     MPI_Status status;
 
-    int N_ROWS_TOTAL = 11;
+    int N_ROWS_TOTAL = 7;
     int N_COLS_TOTAL = 11;
     int MAX_AGE      = 50;
 
@@ -74,10 +74,8 @@ int main(int argc, char **argv) {
     // Write send buffer for full_data from seed, on rank 0
     auto full_data = new int[N_ROWS_TOTAL * N_COLS_TOTAL];
     if (rank == 0) {
-        Matrix seed =
-            matrix::read_matrix_str(matrix::read_file("seed_glider.txt"));
-        std::cout << "Seed " << MAX_AGE << ":\n"
-                  << matrix::write_matrix_str(seed) << std::endl;
+        Matrix seed = matrix::generate_matrix(N_ROWS_TOTAL, N_COLS_TOTAL);
+        std::cout << "Initial seed:\n" << matrix::write_matrix_str(seed);
         int full_data_idx = 0;
         for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
             for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
@@ -106,7 +104,7 @@ int main(int argc, char **argv) {
     // Assign markers to indicate which part of the world belongs to each rank.
     int row_start = offsets_row[coord2d[0]];
     int col_start = offsets_col[coord2d[1]];
-    int row_end = ((coord2d[0] + 1) != RANKS_ROWS) ? offsets_col[coord2d[0] + 1]
+    int row_end = ((coord2d[0] + 1) != RANKS_ROWS) ? offsets_row[coord2d[0] + 1]
                                                    : N_ROWS_TOTAL;
     int col_end = ((coord2d[1] + 1) != RANKS_COLS) ? offsets_col[coord2d[1] + 1]
                                                    : N_COLS_TOTAL;
@@ -227,9 +225,8 @@ int main(int argc, char **argv) {
                 }
             }
         }
-
         std::cout << "Final state at age " << MAX_AGE << ":\n"
-                  << matrix::write_matrix_str(final_state) << std::endl;
+                  << matrix::write_matrix_str(final_state);
     }
 
     MPI_Finalize();
