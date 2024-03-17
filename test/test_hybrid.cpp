@@ -34,7 +34,7 @@ int evolve_omp(Matrix &cells_0, Matrix &cells_1) {
     int n_cols = cells_0.n_cols;
     Matrix row_convolution(n_rows, n_cols);
     Matrix counts(n_rows, n_cols);
-#pragma omp parallel for
+#pragma omp parallel for collapse(2)
     // Row convolution
     for (int i = 0; i < n_rows; i++) {
         for (int j = 1; j < n_cols - 1; j++) {
@@ -45,7 +45,7 @@ int evolve_omp(Matrix &cells_0, Matrix &cells_1) {
 
 #pragma omp barrier
 
-#pragma omp parallel for
+#pragma omp parallel for collapse(2)
     // Column convolution
     for (int i = 1; i < n_rows - 1; i++) {
         for (int j = 1; j < n_cols - 1; j++) {
@@ -56,7 +56,7 @@ int evolve_omp(Matrix &cells_0, Matrix &cells_1) {
 
 #pragma omp barrier
 
-#pragma omp parallel for
+#pragma omp parallel for collapse(2)
     // Evaluate rules
     for (int i = 0; i < n_rows; i++) {
         for (int j = 0; j < n_cols; j++) {
