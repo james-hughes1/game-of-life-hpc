@@ -1,0 +1,47 @@
+Matrix size 4x4 /////// Took: 0.0004022 ms. (Mean of 10 runs.)
+Matrix size 3x3 /////// Took: 0.000239 ms. (Mean of 10 runs.)
+Matrix size 2x2 /////// Took: 0.000157 ms. (Mean of 10 runs.)
+
+Matrix size 8x8 /////// Took: 0.0003754 ms. (Mean of 10 runs.)
+Matrix size 7x7 /////// Took: 0.0003221 ms. (Mean of 10 runs.)
+Matrix size 6x6 /////// Took: 0.0002638 ms. (Mean of 10 runs.)
+
+Matrix size 16x16 /////// Took: 0.000737 ms. (Mean of 10 runs.)
+Matrix size 15x15 /////// Took: 0.000638 ms. (Mean of 10 runs.)
+Matrix size 14x14 /////// Took: 0.0006926 ms. (Mean of 10 runs.)
+
+Matrix size 32x32 /////// Took: 0.0028646 ms. (Mean of 10 runs.)
+Matrix size 31x31 /////// Took: 0.0019504 ms. (Mean of 10 runs.)
+Matrix size 30x30 /////// Took: 0.0023045 ms. (Mean of 10 runs.)
+
+Matrix size 64x64 /////// Took: 0.0116153 ms. (Mean of 10 runs.)
+Matrix size 63x63 /////// Took: 0.0090895 ms. (Mean of 10 runs.)
+Matrix size 62x62 /////// Took: 0.00884 ms. (Mean of 10 runs.)
+
+Matrix size 128x128 /////// Took: 0.0930028 ms. (Mean of 10 runs.)
+Matrix size 127x127 /////// Took: 0.0913585 ms. (Mean of 10 runs.)
+Matrix size 126x126 /////// Took: 0.0597442 ms. (Mean of 10 runs.)
+
+Matrix size 256x256 /////// Took: 0.673736 ms. (Mean of 10 runs.)
+Matrix size 255x255 /////// Took: 0.215529 ms. (Mean of 10 runs.)
+Matrix size 254x254 /////// Took: 0.224262 ms. (Mean of 10 runs.)
+
+Matrix size 512x512 /////// Took: 2.08805 ms. (Mean of 10 runs.)
+Matrix size 511x511 /////// Took: 1.63168 ms. (Mean of 10 runs.)
+Matrix size 510x510 /////// Took: 1.59975 ms. (Mean of 10 runs.)
+
+Matrix size 1024x1024 /////// Took: 9.38707 ms. (Mean of 10 runs.)
+Matrix size 1023x1023 /////// Took: 6.32963 ms. (Mean of 10 runs.)
+Matrix size 1022x1022 /////// Took: 5.87971 ms. (Mean of 10 runs.)
+
+Matrix size 2048x2048 /////// Took: 86.2636 ms. (Mean of 10 runs.)
+Matrix size 2047x2047 /////// Took: 42.3458 ms. (Mean of 10 runs.)
+Matrix size 2046x2046 /////// Took: 40.2228 ms. (Mean of 10 runs.)
+
+Matrix size 4096x4096 /////// Took: 570.606 ms. (Mean of 10 runs.)
+Matrix size 4095x4095 /////// Took: 383.225 ms. (Mean of 10 runs.)
+Matrix size 4094x4094 /////// Took: 357.996 ms. (Mean of 10 runs.)
+
+Matrix size 8192x8192 /////// Took: 2771.75 ms. (Mean of 10 runs.)
+Matrix size 8191x8191 /////// Took: 2002.2 ms. (Mean of 10 runs.)
+Matrix size 8190x8190 /////// Took: 1856.55 ms. (Mean of 10 runs.)
