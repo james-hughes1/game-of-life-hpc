@@ -80,35 +80,66 @@ int main(int argc, char **argv) {
 
     MPI_Status status;
 
-    int N_ROWS_TOTAL = 5;
-    int N_COLS_TOTAL = 7;
-    int MAX_AGE      = 50;
+    // Find number of threads
+    int global_num_threads;
+#pragma omp parallel
+    {
+        int thread_id = omp_get_thread_num();
+        if (thread_id == 0) {
+            global_num_threads = omp_get_num_threads();
+        }
+    }
 
-    // RANKS_ROWS * RANKS_COLS == nranks
+    // ranks_rows * ranks_cols == nranks
     // Defines the layout of the chunk topology.
-    int RANKS_ROWS = 2;
-    int RANKS_COLS = 2;
+    int ranks_rows = std::stoi(argv[1]);
+    int ranks_cols = std::stoi(argv[2]);
+
+    int max_age      = std::stoi(argv[3]);
+    bool random_seed = (argc == 6);
+
+    int n_rows_total;
+    int n_cols_total;
+
+    // Generate seed randomly or via input file.
+
+    if (rank == 0) {
+        if (random_seed) {
+            n_rows_total = std::stoi(argv[4]);
+            n_cols_total = std::stoi(argv[5]);
+        } else {
+            Matrix seed  = matrix::read_matrix_str(matrix::read_file(argv[4]));
+            n_rows_total = seed.n_rows;
+            n_cols_total = seed.n_cols;
+        }
+        std::cout << "Running simulation with " << global_num_threads
+                  << " threads and " << nranks << " ranks in a " << ranks_rows
+                  << "x" << ranks_cols << " chunk topology." << std::endl;
+    }
+
+    MPI_Bcast(&n_rows_total, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&n_cols_total, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
     // Split up rows and columns to enable proper ordering for full_data into
     // chunks.
-    auto chunk_rows  = new int[RANKS_ROWS];
-    auto offsets_row = new int[RANKS_ROWS];
-    for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
+    auto chunk_rows  = new int[ranks_rows];
+    auto offsets_row = new int[ranks_rows];
+    for (int i_chunk = 0; i_chunk < ranks_rows; i_chunk++) {
         int row_start, row_end;
         std::tie(row_start, row_end) =
-            conway::divide_rows(N_ROWS_TOTAL, RANKS_ROWS, i_chunk);
+            conway::divide_rows(n_rows_total, ranks_rows, i_chunk);
         chunk_rows[i_chunk] = (row_end - row_start);
         offsets_row[i_chunk] =
             (i_chunk == 0) ? 0
                            : offsets_row[i_chunk - 1] + chunk_rows[i_chunk - 1];
     }
 
-    auto chunk_cols  = new int[RANKS_COLS];
-    auto offsets_col = new int[RANKS_COLS];
-    for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
+    auto chunk_cols  = new int[ranks_cols];
+    auto offsets_col = new int[ranks_cols];
+    for (int j_chunk = 0; j_chunk < ranks_cols; j_chunk++) {
         int col_start, col_end;
         std::tie(col_start, col_end) =
-            conway::divide_rows(N_COLS_TOTAL, RANKS_COLS, j_chunk);
+            conway::divide_rows(n_cols_total, ranks_cols, j_chunk);
         chunk_cols[j_chunk] = (col_end - col_start);
         offsets_col[j_chunk] =
             (j_chunk == 0) ? 0
@@ -118,28 +149,29 @@ int main(int argc, char **argv) {
     // Aggregate chunk dimensions into 'flat' sizes; same for offsets.
     auto chunk_sizes = new int[nranks];
     auto offsets     = new int[nranks];
-    for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
-        for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
-            chunk_sizes[i_chunk * RANKS_COLS + j_chunk] =
+    for (int i_chunk = 0; i_chunk < ranks_rows; i_chunk++) {
+        for (int j_chunk = 0; j_chunk < ranks_cols; j_chunk++) {
+            chunk_sizes[i_chunk * ranks_cols + j_chunk] =
                 chunk_rows[i_chunk] * chunk_cols[j_chunk];
-            offsets[i_chunk * RANKS_COLS + j_chunk] =
+            offsets[i_chunk * ranks_cols + j_chunk] =
                 (i_chunk + j_chunk == 0)
                     ? 0
-                    : offsets[i_chunk * RANKS_COLS + j_chunk - 1] +
-                          chunk_sizes[i_chunk * RANKS_COLS + j_chunk - 1];
+                    : offsets[i_chunk * ranks_cols + j_chunk - 1] +
+                          chunk_sizes[i_chunk * ranks_cols + j_chunk - 1];
         }
     }
 
     // Write send buffer for full_data from seed, on rank 0
-    auto full_data = new int[N_ROWS_TOTAL * N_COLS_TOTAL];
+    auto full_data = new int[n_rows_total * n_cols_total];
     if (rank == 0) {
-        Matrix seed =
-            matrix::read_matrix_str(matrix::read_file("seed_glider.txt"));
+        Matrix seed = (random_seed)
+                          ? matrix::generate_matrix(n_rows_total, n_cols_total)
+                          : matrix::read_matrix_str(matrix::read_file(argv[4]));
         std::cout << "Initial seed:\n"
                   << matrix::write_matrix_str(seed) << std::endl;
         int full_data_idx = 0;
-        for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
-            for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
+        for (int i_chunk = 0; i_chunk < ranks_rows; i_chunk++) {
+            for (int j_chunk = 0; j_chunk < ranks_cols; j_chunk++) {
                 for (int i = 0; i < chunk_rows[i_chunk]; i++) {
                     for (int j = 0; j < chunk_cols[j_chunk]; j++) {
                         full_data[full_data_idx] = seed(
@@ -152,15 +184,15 @@ int main(int argc, char **argv) {
     }
 
     // Create coords; note that these match rows and columns.
-    int coord2d[2] = {rank / RANKS_COLS, rank % RANKS_COLS};
+    int coord2d[2] = {rank / ranks_cols, rank % ranks_cols};
 
     // Assign markers to indicate which part of the world belongs to each rank.
     int row_start = offsets_row[coord2d[0]];
     int col_start = offsets_col[coord2d[1]];
-    int row_end = ((coord2d[0] + 1) != RANKS_ROWS) ? offsets_row[coord2d[0] + 1]
-                                                   : N_ROWS_TOTAL;
-    int col_end = ((coord2d[1] + 1) != RANKS_COLS) ? offsets_col[coord2d[1] + 1]
-                                                   : N_COLS_TOTAL;
+    int row_end = ((coord2d[0] + 1) != ranks_rows) ? offsets_row[coord2d[0] + 1]
+                                                   : n_rows_total;
+    int col_end = ((coord2d[1] + 1) != ranks_cols) ? offsets_col[coord2d[1] + 1]
+                                                   : n_cols_total;
 
     // Scatter world across ranks.
     auto chunk_data = new int[(row_end - row_start) * (col_end - col_start)];
@@ -179,26 +211,26 @@ int main(int argc, char **argv) {
 
     // Find adjacent ranks
     int up =
-        ((coord2d[0] + RANKS_ROWS - 1) % RANKS_ROWS) * RANKS_COLS + coord2d[1];
-    int down = ((coord2d[0] + 1) % RANKS_ROWS) * RANKS_COLS + coord2d[1];
+        ((coord2d[0] + ranks_rows - 1) % ranks_rows) * ranks_cols + coord2d[1];
+    int down = ((coord2d[0] + 1) % ranks_rows) * ranks_cols + coord2d[1];
     int left =
-        coord2d[0] * RANKS_COLS + ((coord2d[1] + RANKS_COLS - 1) % RANKS_COLS);
-    int right = coord2d[0] * RANKS_COLS + ((coord2d[1] + 1) % RANKS_COLS);
+        coord2d[0] * ranks_cols + ((coord2d[1] + ranks_cols - 1) % ranks_cols);
+    int right = coord2d[0] * ranks_cols + ((coord2d[1] + 1) % ranks_cols);
 
     // Get diagonal neighbours
-    int upright = ((coord2d[0] + RANKS_ROWS - 1) % RANKS_ROWS) * RANKS_COLS +
-                  ((coord2d[1] + 1) % RANKS_COLS);
-    int downright = ((coord2d[0] + 1) % RANKS_ROWS) * RANKS_COLS +
-                    ((coord2d[1] + 1) % RANKS_COLS);
-    int downleft = ((coord2d[0] + 1) % RANKS_ROWS) * RANKS_COLS +
-                   ((coord2d[1] + RANKS_COLS - 1) % RANKS_COLS);
-    int upleft = ((coord2d[0] + RANKS_ROWS - 1) % RANKS_ROWS) * RANKS_COLS +
-                 ((coord2d[1] + RANKS_COLS - 1) % RANKS_COLS);
+    int upright = ((coord2d[0] + ranks_rows - 1) % ranks_rows) * ranks_cols +
+                  ((coord2d[1] + 1) % ranks_cols);
+    int downright = ((coord2d[0] + 1) % ranks_rows) * ranks_cols +
+                    ((coord2d[1] + 1) % ranks_cols);
+    int downleft = ((coord2d[0] + 1) % ranks_rows) * ranks_cols +
+                   ((coord2d[1] + ranks_cols - 1) % ranks_cols);
+    int upleft = ((coord2d[0] + ranks_rows - 1) % ranks_rows) * ranks_cols +
+                 ((coord2d[1] + ranks_cols - 1) % ranks_cols);
 
     std::cout << "Rank " << rank << " topology coords: (" << coord2d[0] << ","
               << coord2d[1] << ")" << std::endl;
 
-    for (int age = 0; age < MAX_AGE; age++) {
+    for (int age = 0; age < max_age; age++) {
         // Update within rank periodicity first.
         if (age % 2 == 0) {
             update_boundary_omp(WorldChunk.Cells_0);
@@ -276,10 +308,10 @@ int main(int argc, char **argv) {
 
     // Read back from full_data
     if (rank == 0) {
-        Matrix final_state(N_ROWS_TOTAL, N_COLS_TOTAL);
+        Matrix final_state(n_rows_total, n_cols_total);
         int full_data_idx = 0;
-        for (int i_chunk = 0; i_chunk < RANKS_ROWS; i_chunk++) {
-            for (int j_chunk = 0; j_chunk < RANKS_COLS; j_chunk++) {
+        for (int i_chunk = 0; i_chunk < ranks_rows; i_chunk++) {
+            for (int j_chunk = 0; j_chunk < ranks_cols; j_chunk++) {
                 for (int i = 0; i < chunk_rows[i_chunk]; i++) {
                     for (int j = 0; j < chunk_cols[j_chunk]; j++) {
                         final_state(i + offsets_row[i_chunk],
@@ -290,7 +322,7 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        std::cout << "Final state at age " << MAX_AGE << ":\n"
+        std::cout << "Final state at age " << max_age << ":\n"
                   << matrix::write_matrix_str(final_state) << std::endl;
     }
 

@@ -8,20 +8,24 @@
 #include "conway/include/matrix.h"
 #include "conway/include/world.h"
 
-int main() {
+int main(int argc, char **argv) {
     /**
      * Main procedure to run.
      */
 
-    std::string glider_seed_str = matrix::read_file("seed_glider.txt");
-    Matrix glider_seed          = matrix::read_matrix_str(glider_seed_str);
-    World Glider(glider_seed);
+    int max_age = std::stoi(argv[1]);
+    Matrix seed =
+        (argc == 4)
+            ? matrix::generate_matrix(std::stoi(argv[2]), std::stoi(argv[3]))
+            : matrix::read_matrix_str(matrix::read_file(argv[2]));
 
-    Glider.display_world();
-    for (int age = 0; age < 50; age++) {
-        Glider.update_boundary();
-        Glider.evaluate_rules();
+    World InputWorld(seed);
+
+    InputWorld.display_world();
+    for (int age = 0; age < max_age; age++) {
+        InputWorld.update_boundary();
+        InputWorld.evaluate_rules();
     }
-    Glider.display_world();
+    InputWorld.display_world();
     return 0;
 }
