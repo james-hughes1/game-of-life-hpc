@@ -11,15 +11,14 @@
 #include "timing/include/timing.h"
 
 double time_count_neighbours(int n_rows, int n_cols) {
-    double total_time;
-    timing::start_clock();
+    double total_time = 0;
     for (int run = 0; run < 10; run++) {
         Matrix random_matrix = matrix::generate_matrix(n_rows, n_cols);
-        double start_time    = timing::get_split();
-        Matrix count_matrix  = matrix::count_neighbours(random_matrix);
-        total_time += (timing::get_split() - start_time);
+        timing::start_clock();
+        Matrix count_matrix = matrix::count_neighbours(random_matrix);
+        total_time += timing::get_split();
     }
-    return timing::get_split() / 10;
+    return total_time / 10;
 }
 
 int main() {
