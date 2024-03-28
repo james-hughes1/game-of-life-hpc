@@ -1,3 +1,8 @@
+/**
+ * @file test_matrix.cpp Unit testing for matrix module.
+ * @details Run via ./bin/test_conway
+ */
+
 #include <gtest/gtest.h>
 #include <string>
 

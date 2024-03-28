@@ -1,3 +1,8 @@
+/**
+ * @file test_world.cpp Unit testing for world module.
+ * @details Run via ./bin/test_conway
+ */
+
 #include <gtest/gtest.h>
 
 #include "matrix.h"

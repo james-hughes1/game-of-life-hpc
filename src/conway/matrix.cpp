@@ -1,5 +1,5 @@
 /**
- * \file multiply.cpp Contains useful functions for matrix operations.
+ * \file matrix.cpp Contains useful functions for low-level matrix operations.
  */
 
 #include <fstream>
@@ -10,9 +10,12 @@
 
 #include "include/matrix.h"
 
-// class Matrix
-
 Matrix::Matrix(int n_rows, int n_cols) {
+    /**
+     * @brief Initialises Matrix class object.
+     * @param n_rows Number of rows of the matrix.
+     * @param n_cols Number of columns of the matrix.
+     */
     this->n_rows = n_rows;
     this->n_cols = n_cols;
     this->data   = new int[n_rows * n_cols];
@@ -20,8 +23,10 @@ Matrix::Matrix(int n_rows, int n_cols) {
 
 int &Matrix::operator()(int i, int j) { return this->data[i * n_cols + j]; }
 
+// Destructor
 Matrix::~Matrix() { delete[] data; }
 
+// Copy constructor
 Matrix::Matrix(const Matrix &old_matrix) {
     n_rows = old_matrix.n_rows;
     n_cols = old_matrix.n_cols;
@@ -30,6 +35,8 @@ Matrix::Matrix(const Matrix &old_matrix) {
         data[i] = old_matrix.data[i];
     }
 }
+
+// Copy assignment operator
 Matrix &Matrix::operator=(Matrix &old_matrix) {
     n_rows = old_matrix.n_rows;
     n_cols = old_matrix.n_cols;
@@ -41,6 +48,12 @@ Matrix &Matrix::operator=(Matrix &old_matrix) {
 }
 
 bool Matrix::operator==(Matrix &matrix_other) {
+    /**
+     * @brief Overloaded equality operator for Matrix class.
+     * @details Only returns true if the matrix has identical size and entries.
+     * @param matrix_other matrix to be compared to
+     * @returns bool Evaluation of comparison
+     */
     if (this->n_rows != matrix_other.n_rows or
         this->n_cols != matrix_other.n_cols) {
         return false;
@@ -54,6 +67,9 @@ bool Matrix::operator==(Matrix &matrix_other) {
 }
 
 int Matrix::zero() {
+    /**
+     * @brief Method used to set all matrix entries to zero.
+     */
     for (int i = 0; i < (n_rows) * (n_cols); i++) {
         data[i] = 0;
     }
@@ -61,6 +77,11 @@ int Matrix::zero() {
 }
 
 int Matrix::write_sub_matrix(Matrix &sub_matrix) {
+    /**
+     * @brief Method used to replace all matrix entries except the outer edges.
+     * @param sub_matrix matrix which should be smaller by 2 in both dimensions,
+     * used to replace entries.
+     */
     for (int i = 0; i < sub_matrix.n_rows; i++) {
         for (int j = 0; j < sub_matrix.n_cols; j++) {
             (*this)(i + 1, j + 1) = sub_matrix(i, j);
@@ -70,6 +91,10 @@ int Matrix::write_sub_matrix(Matrix &sub_matrix) {
 }
 
 Matrix Matrix::read_sub_matrix() {
+    /**
+     * @brief Used to access all entries of a matrix except the outer edges.
+     * @returns sub_matrix matrix containing the inner matrix values.
+     */
     Matrix sub_matrix(this->n_rows - 2, this->n_cols - 2);
     for (int i = 0; i < sub_matrix.n_rows; i++) {
         for (int j = 0; j < sub_matrix.n_cols; j++) {
@@ -82,6 +107,11 @@ Matrix Matrix::read_sub_matrix() {
 // namespace matrix
 
 std::string matrix::read_file(std::string filename) {
+    /**
+     * @brief Used to read in a .txt file as a string.
+     * @param filename Name of the file to be read, including the extension.
+     * @returns file_string string of contents of the specified file.
+     */
     std::string file_string = " ";
     std::ifstream file;
     std::string new_line;
@@ -109,6 +139,15 @@ std::string matrix::read_file(std::string filename) {
 }
 
 Matrix matrix::read_matrix_str(std::string matrix_string) {
+    /**
+     * @brief Used to convert a string to a matrix.
+     * @details The string should be a sequence of integers with spaces or new
+     * lines separating them. The first two integeres specify the number of rows
+     * and columns respectively.
+     * @param matrix_string The string specifying the matrix entries
+     * @returns A The formed matrix
+     *
+     */
     std::vector<int> string_values(0);
     std::string next_string = "";
     for (size_t i = 0; i < matrix_string.length(); i++) {
@@ -144,6 +183,11 @@ Matrix matrix::read_matrix_str(std::string matrix_string) {
 }
 
 std::string matrix::write_matrix_str(Matrix A) {
+    /**
+     * @brief Converts a Matrix to a string, with each row on a new line.
+     * @param A The matrix to be converted
+     * @returns output_string The string of the matrix entries
+     */
     std::string output_string = "";
     for (int i = 0; i < A.n_rows; i++) {
         for (int j = 0; j < A.n_cols; j++) {
@@ -163,8 +207,10 @@ std::string matrix::write_matrix_str(Matrix A) {
 
 Matrix matrix::count_neighbours(Matrix &A) {
     /**
-     * \brief Performs the necessary 3x3 2D convolution required for Game of
-     * Life. \param A Input matrix.
+     * @brief Used to evaluate the result of a convolution between a matrix and
+     * the box blur kernel (scaled up by a factor of 9).
+     * @param A The matrix to be convolved
+     * @returns C The resulting matrix
      */
 
     int n_rows = A.n_rows;
@@ -189,6 +235,12 @@ Matrix matrix::count_neighbours(Matrix &A) {
 }
 
 Matrix matrix::generate_matrix(int n_rows, int n_cols) {
+    /**
+     * @brief Generates a random binary matrix of a given size.
+     * @param n_rows Number of rows of the generated matrix
+     * @param n_cols Number of columns of the generated matrix
+     * @returns A The generated matrix
+     */
     Matrix A(n_rows, n_cols);
     std::random_device rd;
     std::mt19937 gen(rd());

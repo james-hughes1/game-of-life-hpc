@@ -1,3 +1,10 @@
+/**
+ * @file time_hybrid.cpp Assesses how the dd1 script time scales with simulation
+ * size for 200 ticks.
+ * @details Can be run via `mpirun -n n_ranks ./bin/time_hybrid`, noting that
+ * n_ranks must be square.
+ */
+
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -71,10 +78,6 @@ int evolve_omp(Matrix &cells_0, Matrix &cells_1) {
 }
 
 int main(int argc, char **argv) {
-    /**
-     * Main procedure to run.
-     */
-
     MPI_Init(&argc, &argv);
     int rank, nranks;
     MPI_Comm_size(MPI_COMM_WORLD, &nranks);

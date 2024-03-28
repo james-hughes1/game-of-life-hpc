@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 
 \title{Advanced Research Computing Coursework Report}
-\author{James Hughes}
+\author{James Hughes\\ Word count: 2977}
 
 \usepackage[hidelinks]{hyperref}
 \usepackage{url}
@@ -43,16 +43,16 @@
 
 \newpage
 
-\section*{Introduction}
+\section{Introduction}
 
 Conway's Game of Life first made an appearance in public discourse in 1970,
 when Martin Gardner wrote a brief article introducing the concept in his column Mathematical Games in Scientific American\cite{gameoflife}.
-The piece briefly describes game, stating its rules,
+The piece briefly described the game, stating its rules,
 and displaying various diagrams of interesting simple behaviours such as periodicity and indefinite movement across the board.
-It is notable that Gardner starts by suggesting that readers use `counters and a board', or failing that, `pencil and graph paper',
+It is notable that Gardner suggested that readers use `counters and a board', or failing that, `pencil and graph paper',
 to see a demonstration of the game in action.
 This is in stark contrast to the situation today, where plenty of computer simulations are easily accesible online \cite{playgameoflife},
-enabling the game's interesting behaviours at scale to be easily explored.
+enabling the game's interesting behaviours at scale to be appreciated.
 This project seeks to take the ease of implementing this simulation with modern computing tools a step further,
 by treating it as an exercise in developing highly optimised and parallelised code,
 with a focus on maximising the performance of the simulation algorithm when run at scale.
@@ -60,21 +60,20 @@ with a focus on maximising the performance of the simulation algorithm when run 
 The Game of Life consists of a large orthogonal grid of cells which exist in either one of two states: `dead' or `alive'.
 At each stage or `tick' of the simulation, the state of each cell is updated according to its own current state,
 and the current state of the cells adjacent (including diagonally) to it.
-The only state changes occur when:
+The current state of every cell persists to the next tick, except,
 
 \begin{itemize}
-    \item an `alive' cell fewer than two or more than three `alive' neighbours will become `dead' in the next tick, and
+    \item an `alive' cell with fewer than two, or more than three, `alive' neighbours will become `dead' in the next tick, and
     \item a `dead' cell with exactly three `alive' neighbours will become `alive' in the next tick \cite{gameoflife}.
 \end{itemize}
 
 The evolution of the state of any cell within the simulation is thus bound by a deterministic rule that only depends on the current state of the simulation in a localised area.
 This makes it akin to physical simulations of the real-world, for instance discrete numerical techniques to solve PDEs that relate to fluid dynamics.
-In this sense, it is a suitable choice of problem to demonstrate the role of high-performance computing at the frontier of scientific research.
+Therefore, it is a suitable choice of problem to demonstrate the role of high-performance computing at the frontier of scientific research.
 
 While the focus of this project was to produce highly optimised code,
 care was taken to balance this with traditional best practices in software development.
-The general approach in the first instance was to create code that was readable and verified via unit tests,
-and only once this stage was reached was the code then iteratively re-factored to be increasingly optimised.
+Only once the codebase was implemented and verified in a readable manner was it then iteratively re-factored to be increasingly optimised.
 This ensured that the maintainability and robustness of the earlier code could be preserved as much as possible,
 despite the tendency of optimisation to reduce these qualities.
 In summary, the strategy of development sought primarily to demonstrate sophisticated optimisation techniques,
@@ -84,22 +83,21 @@ while not losing sight of computer scientist Donald Knuth's sage advice \cite{10
     ``Premature optimization is the root of all evil.''
 \end{quote}
 
-\section*{Algorithm Design and Early Development}
+\section{Algorithm Design and Early Development}
 
-The simulation primarily consists of a large orthogonal grid of cells, each of which changes state over time.
-Therefore the first consideration in carrying out this simulation computationally was the abstraction and storage of this grid in memory.
+The first consideration in carrying out this simulation computationally was the abstraction and storage of the simulation grid in memory.
 Conceptually, operations need to occur at two levels of abstraction:
 \begin{itemize}
-    \item the level of matrix operations, including reading the state (stored in binary) of a cell and counting the number of alive neighbours; and
+    \item the level of matrix operations, including reading binary cell states and summing the adjacent cell states; and
     \item the level of simulation operations, such as evolving the simulation, storing how many ticks have passed, and displaying the result.
 \end{itemize}
 
 Therefore, both a \texttt{Matrix} and a \texttt{World} class were created to store methods and attributes relevant to these respective levels.
 \texttt{World} objects store two \texttt{Matrix} objects as members, to represent the current state of the simulation, and the next state.
-The higher-level \texttt{World} objects also store an \texttt{age} attribute to keep track of the progress of the simulation,
-and whose parity determines which of the two grids stores the current state.
-The \texttt{Matrix} class stores, among others, a \texttt{count\_neighbours} method,
-the first prototype of which is shown below:
+They also store an \texttt{age} attribute to keep track of the progress of the simulation,
+and whose parity determines which of the two \texttt{Matrix} members stores the current state.
+
+One of the key routines to be prototyped was the function responsible for summing adjacent cell states:
 
 \begin{lstlisting}
 Matrix matrix::count_neighbours(Matrix A) {
@@ -150,9 +148,9 @@ int conway::evaluate_rules(Matrix cells_count, Matrix &cells_current,
 The routine evaluates a set of nested if statements,
 which first inspects the current state of the cell, and then checks the counts of the neighbouring cells accordingly.
 Both of these fundamental routines were kept separate from the handling of the periodic boundary.
-Within the \texttt{World} class, the grid of cells was represented as a matrix that had an extra row of cells on each edge.
+Within the \texttt{World} class, the grid of cells was represented as a matrix that had an extra row of `ghost' cells on each edge.
 There was then a separate routine to handle the update of these edges to implement a periodic boundary,
-by copying each `proper' edge and vertex of the grid to the corresponding opposite `extra' edge or vertex.
+by copying each `proper' edge and vertex of the grid to the corresponding opposite ghost edge or vertex.
 Therefore the evolution of the simulation by one tick is decomposed into updating this boundary first, and then updating the cells.
 
 This modular quality of the code enabled precise verification early on in the project,
@@ -160,11 +158,10 @@ and indeed developing a suite of unit tests via GoogleTest was the next step aft
 This ensured that these core routines behaved as expected, and handled edge cases, forming part of a testing led-development strategy.
 Creating the test suite involved the anticipation of other important functions that handled the input and output of matrices, for instance.
 This ensured that the later development was more efficient as the modular organisation of the code, and the role of each routine, had already been planned out.
-Moreover, the modularity contributed to a more maintanable code, particularly with the separate handling of the boundary,
-in that different styles of boundaries (such as constant or reflective padding) could be easily implemented later on.
-This was incidentally beneficial in the later stages of optimisation where these routines could be easily incorporated with the communication of halos during domain decomposition.
+Moreover, the modularity contributed to a more maintainable code, particularly with the separate handling of the boundary,
+in that different boundary conditions (such as constant or reflective padding) could be easily implemented in future.
 
-\section*{Optimisation and Parallelisation}
+\section{Optimisation and Parallelisation}
 
 Optimisation was first achieved by single-thread improvements.
 The focus was on the fundamental simulation routines since the performance of these becomes increasingly important as the scale of the simulation increases.
@@ -195,11 +192,11 @@ Matrix matrix::count_neighbours(Matrix &A) {
 }
 \end{lstlisting}
 
-Note that in addition to the separation of the convolution into two one-dimensional kernels, the routine now includes the target cell entry in the count,
-thereby removing the need to subtract this value in line 17.
-This reduces the number of operations to compute each count from 10 in the earlier prototype to 6.
+Note that in addition to the separation of the convolution into two one-dimensional kernels, the new routine included the target cell entry in the count,
+removing the need to subtract this value in line 17.
+This reduced the number of operations to compute each count from 10 to 6.
 Additionally, the first row convolution has the extra benefit of accessing both matrices A and B contiguously,
-since all entries of A accessed in each iteration lie in the same row of the matrix.
+since all entries of A accessed in each iteration lie in the same matrix row.
 
 \begin{table}[hp]
     \centering
@@ -263,13 +260,12 @@ since all entries of A accessed in each iteration lie in the same row of the mat
     \label{tab:sepconvtime}
 \end{table}
 
-
 The performance gain was documented by the \texttt{time\_count\_neighbours} script, the results of which are found in Table \ref{tab:sepconvtime}.
-For the largest matrices in the table this optimisation has the effect of a speed up of roughly 8-fold,
+For the largest matrices in the table this optimisation had the effect of a speed up of roughly 8-fold,
 which increases even further for smaller matrices.
-It should also be noted that there appears to be a cache-resonance effect for matrices of size larger than 500,
+It should also be noted that there appeared to be a cache-resonance effect for matrices of size larger than 500,
 significant slow-downs for sizes that are powers of two beyond this number (512, 1024 and so on.).
-In later timing scripts therefore, these sizes of simulation are avoided, so as not to confound different performance factors.
+In later timing scripts therefore, these sizes of simulation were avoided, so as not to confound different performance factors.
 
 Incorporating a transposition of matrix \texttt{B} was also experimented with, both by including a standalone loop to compute a separate matrix \texttt{B\_T},
 as well as computing \texttt{B\_T} directly from \texttt{A} instead of \texttt{B}.
@@ -278,13 +274,13 @@ such that they both benefit from contiguous array access.
 However, this appeared to cause a decrease in performance.
 This is also a reasonable outcome considering that both the convolution operations and the transposition involve $O(n^2)$ operations with respect to the matrix size $n$,
 and so the gain from more efficient usage of the cache is offset by the extra number of total operations from the transposition itself, even at scale.
-In this way, transposition is much more likely to be fruitful (at scale) in terms of performance in such a scenario if the main algorithm has a computational cost worse than $O(n^2)$.
 
-The \texttt{evaluate\_rules} function was also optimised to produce the folowing code:
+The \texttt{evaluate\_rules} function was also optimised to produce the following code:
+
+\pagebreak
 
 \begin{lstlisting}
-int conway::evaluate_rules(Matrix &Cells_count, Matrix &Cells_current,
-                           Matrix &Cells_next) {
+int conway::evaluate_rules(Matrix &Cells_count, Matrix &Cells_current, Matrix &Cells_next) {
     for (int i = 0; i < Cells_count.n_rows; i++) {
         for (int j = 0; j < Cells_count.n_cols; j++) {
             Cells_next(i, j) =
@@ -296,26 +292,25 @@ int conway::evaluate_rules(Matrix &Cells_count, Matrix &Cells_current,
 }
 \end{lstlisting}
 
-The main improvement compared to the earlier versions of this function is that this routine has no if statements,
-each of which can cause costly branch mis-predictions in the CP, a problem which scales with the size of the simulation.
-This updated routine avoids the conditional control flow by employing a masking technique which exploits the binary nature of the cell states.
-In fact, in this case the optimisation is arguably much quicker to intuit as someone reading the code for the first time;
+The main change is the removal of nested if statements, avoiding costly branch mis-predictions in the CPU, a problem which scales with the size of the simulation.
+This routine instead employs a masking technique which exploits the binary nature of the cell states.
+In fact, in this case the optimisation is arguably more readable;
 it essentially updates each cell to alive only if there are two adjacent alive cells (in which case the cell could be alive or dead),
 or if there are three and the cell is currently alive.
 On a more subtle note, C++ implements short-circuit evaluation of these boolean operators,
-meaning that the second expression evaluation can be bypassed when the first (true for or, false for and)
+meaning that the second expression evaluation can be bypassed when the first
 already determines the overall value of the boolean operator.
 With this in mind, the more likely condition of `exactly 2 alive neighbours' is placed before `exactly 3 alive neighbours and current cell alive',
 while the less likely condition of `exactly 3 alive neighbours' is placed before `current cell is alive',
 with the aim of minimising the number of boolean expressions that must be evaluated.
 
-The project explored the use of both MPI and OpenMP to make the code parallelised.
+Further optimisation was achieved by parallelisation, using MPI and OpenMP.
 The main difference between the two interfaces is that unlike OpenMP, MPI `ranks' do not have access to a shared memory space,
 instead having separate allocated memory that can be communicated across the ranks.
-Therefore MPI was used to employ a domain decomposition of the simulation, that is,
+Therefore MPI was used to implement a domain decomposition of the simulation, that is,
 dividing the simulation grid amongst the ranks to be separately evolved.
 The main challenge with this is implementing an organised collective communication such that cells on the boundaries of each `chunk'
-can be correctly updated with respect to the values of the correct neighbouring cells located on other ranks.
+can be correctly updated with respect to the values of the correct neighbouring cells located in other chunks.
 
 In the first instance this was done using a 1D topology, dividing the simulation along the vertical dimension.
 
@@ -331,19 +326,19 @@ In the first instance this was done using a 1D topology, dividing the simulation
     \label{fig:domain_1d_2}
     \end{subfigure}
 
-    \caption{Illustration of the communication between chunks in 1D topology.}
+    \caption{Illustration of the communication between chunks in the 1D topology.}
     \label{fig:domain_1d}
 \end{figure}
 
-As previously mentioned, the pre-existing routine for updating the periodic boundary was helpful here.
+Incidentally, the pre-existing routine for updating the periodic boundary was helpful here.
 This routine updates every `ghost' cell at the boundary of the matrix of cell values with the corresponding true inner cell value found on the opposite side of the matrix.
-Without parallelisation this simply implements the periodic boundary at the extremes of the boundary.
-But adding this as an extra step before communicating between ranks is also help, as shown in Figure \ref{fig:domain_1d}.
+Without parallelisation this simply implements the periodic boundary at the extremes of the simulation.
+But adding this as an extra step before communicating between ranks is also helpful, as shown in Figure \ref{fig:domain_1d}.
 Without this step, vertices must be passed to multiple locations which can make it difficult to keep track of where cell values are communicated, as in Figure \ref{fig:domain_1d_1}.
 Moreover, there must be separate communications for the edges and vertices.
 
-On the other hand, Figure \ref{fig:domain_1d_2} demonstrates how using the intermediate update step makes the code more interpretable,
-and thus maintainable and easier to debug (and develop into the 2D topology).
+On the other hand, Figure \ref{fig:domain_1d_2} demonstrates how using the intermediate update step makes the code more interpretable.
+In turn, this made the later adaptation to a 2D topology easier.
 In this method, the communication can be done in just two MPI statements:
 
 \begin{lstlisting}
@@ -370,7 +365,7 @@ but the two-step approach also made this more manageable.
     \label{fig:domain_2d_2}
     \end{subfigure}
 
-    \caption{Illustration of the communication between chunks in 2D topology.}
+    \caption{Illustration of the communication between chunks in the 2D topology.}
     \label{fig:domain_2d}
 \end{figure}
 
@@ -386,7 +381,7 @@ and the same calculations are passed to the \texttt{MPI\_Gatherv} function at th
 The domain decomposition was then integrated with OpenMP functionality to employ threading within each rank.
 This consisted of enabling the convolution, rule evaluation, and periodic boundary update to be performed by mutliple threads sharing the relevant array.
 For this purpose, statements such as \texttt{\#pragma omp parallel for collapse(2)} were used to distribute the serial routines,
-which mostly consisted of for loops, amongst the threads (with texttt{collapse(2)} implementing this for nested for loops).
+which mostly consisted of for loops, amongst the threads (with \texttt{collapse(2)} implementing this for nested for loops).
 Additionally, the setting of shared memory required the use of \texttt{\#pragma omp barrier} statements.
 For instance, for the separable convolution algorithm, this was important because all entries of the intermediate row-convolved matrix are required to accurately perform the column convolution.
 The barrier prevented idle threads from starting the column convolution iterations until the row convolution was complete.
@@ -427,24 +422,6 @@ This is unlike the situation for the parallelised program.
 All subsequent timing experiments were done with the same maximum simulation age 200, as well as the same progression of simulation size.
 Moreover, the investigation of domain decompositions was limited to square layouts.
 
-When inspecting Figure \ref{fig:time_r4}, we see an enormous increase in the time taken for the smallest 1000 by 1000 simulation for four single threaded MPI ranks.
-The time taken increases from 2 to 33 seconds.
-This represents the increase in `fixed' computational cost caused by the collective communication,
-especially at the start and end of the simulation to distribute and recollect the simulation chunks across the ranks.
-However, we continue to observe an apparent $O(n^2)$ scaling law of the time taken with respect to the simulation size.
-Furthermore, in this implementation, the exact coefficient of this scaling law is considerably less than that of the single-threaded program,
-as evidence by the result for the largest simulation which is around 25\% faster than before.
-This indicates that the domain decomposition has successfully increased the performance of the parts of the code that scale with respect to the size of the simulation.
-Distributing each MPI process across multiple threads causes further improvements,
-with speed-ups of roughly 38\%, 60\%, and 66\% for 2, 4, and 8 threads per rank respectively on the largest simulation,
-though this indicates diminshing returns as the number of threads per rank increases.
-
-As the number of ranks increases this trend continues with greater communicated overhead apparent in the smaller simulations,
-but smaller scaling coefficients as the simulation grows in size.
-For large numbers of ranks the fixed computational cost becomes dominant in the experiments,
-with topologies of 5x5 and beyond taking longer to compute the smallest simulations than the single-thread algorithm takes to compute the largest simulation.
-This shows that in practice, the parallelisation parameters must be matched to the problem size; these topologies will likely become optimal for much larger simulations.
-
 \begin{figure}[hp]
     \includegraphics[scale=0.65, center]{figures/time_hybrid_r16_plot.png}
     \caption{Timing plot for 4x4 domain decomposition}
@@ -469,21 +446,37 @@ This shows that in practice, the parallelisation parameters must be matched to t
     \label{fig:time_r49}
 \end{figure}
 
+When inspecting Figure \ref{fig:time_r4}, we see an enormous increase in the time taken for the smallest 1000 by 1000 simulation for four single threaded MPI ranks -- from 2 to 33 seconds.
+This represents the increase in `fixed' computational cost caused by the collective communication,
+especially at the start and end of the simulation to distribute and recollect the simulation chunks across the ranks.
+However, we continue to observe an apparent $O(n^2)$ scaling law of the time taken with respect to the simulation size.
+Furthermore, in this implementation, the exact coefficient of this scaling law is considerably less than that of the single-threaded program,
+as evidence by the result for the largest simulation which is around 25\% faster than before.
+This indicates that the domain decomposition has successfully increased the performance of the parts of the code that scale with respect to the size of the simulation.
+Distributing each MPI process across multiple threads causes further improvements,
+with speed-ups of roughly 38\%, 60\%, and 66\% for 2, 4, and 8 threads per rank respectively on the largest simulation,
+though this indicates diminshing returns as the number of threads per rank increases.
 
-\section*{Summary}
+As the number of ranks increases this trend continues with greater communication overhead apparent in the smaller simulations,
+but smaller scaling coefficients as the simulation grows in size.
+For large numbers of ranks the fixed computational cost becomes dominant in the experiments,
+with topologies of 5x5 and beyond taking longer to compute the smallest simulations than the single-thread algorithm takes to compute the largest simulation.
+This shows that in practice, the parallelisation parameters must be matched to the problem size; these topologies will likely become optimal for much larger simulations.
+
+
+\section{Summary}
 
 This project was an incredibly useful exercise in learning how to use the CSD3 compute resources,
 which comes with its own set of challenges such as setting up the correct module environment,
 configuring SLURM submission scripts correctly,
 and also time management to ensure productivity is maintained in the context of the job queuing system.
-
 Additionally, the focus on developing highly-optimised code required reviewing and practising the fundamentals of the C++ language,
 as well as the best practices studied in the C1 course.
 This was crucial in ensuring that the codebase remained manageable despite the complexity of the parallel code.
 
 There are aspects of the code that could be extended upon in the future.
 For instance, the single-thread, 1D, and 2D domain decomposition scripts could all be integrated to produce a single code that can run in any configuration specified at runtime.
-This would improve the performance compared to using the 2D decomposition for 1 by m chunk layouts,
+This would likely improve the performance compared to using the 2D decomposition for 1 by m chunk layouts,
 since the 1D implementation invokes far less fixed cost in the form of setting up the Cartesian grid of chunks.
 Additionally, a routine could be added to automatically find a suitable chunk topology given the raw number of mpi ranks and the size of the simulation.
 Similarly, the possibility of cache resonance in Table \ref{tab:sepconvtime} could be investigated further,
