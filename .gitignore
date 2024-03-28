@@ -4,6 +4,8 @@
 *.blg
 *.log
 *.synctex.gz
+*.toc
+*.out
 
 # Build files
 bin/
