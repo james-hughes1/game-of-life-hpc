@@ -24,3 +24,4 @@ docs/latex/*
 gmon.out
 prof/*
 !prof/*.txt
+!prof/hpc/

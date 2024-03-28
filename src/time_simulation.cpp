@@ -28,16 +28,11 @@ int main() {
      * Main procedure to run.
      */
 
+    int MAX_AGE = 200;
     std::fstream file("prof/time_simulation.txt");
-    for (int world_size = 4; world_size <= 2048; world_size *= 2) {
-        for (int offset = 0; offset < 3; offset++) {
-            file << "World size " << world_size - offset << "x"
-                 << world_size - offset << ", age 100 /////// Took: "
-                 << time_simulation(world_size - offset, world_size - offset,
-                                    100)
-                 << " ms." << std::endl;
-        }
-        file << std::endl;
+    for (int world_size = 1000; world_size <= 10000; world_size += 1000) {
+        file << world_size << " " << world_size << " " << MAX_AGE << " "
+             << time_simulation(world_size, world_size, MAX_AGE) << std::endl;
     }
     file.close();
     return 0;

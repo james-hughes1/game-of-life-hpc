@@ -214,6 +214,10 @@ int conway::update_boundary(Matrix &Cells_current) {
 }
 
 std::tuple<int, int> conway::divide_rows(int rows, int size, int rank) {
+    // This helper function has the same functionality as a routine
+    //`divide_rows` from the repository:
+    // https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/
+    // c2_advanced_research_computing/-/tree/main/Snippets/MPI?ref_type=heads
     int row_rank  = rows / size;
     int auxrow    = rows % size;
     int start_row = rank * row_rank;

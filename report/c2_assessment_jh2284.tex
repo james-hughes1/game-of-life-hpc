@@ -342,17 +342,102 @@ But adding this as an extra step before communicating between ranks is also help
 Without this step, vertices must be passed to multiple locations which can make it difficult to keep track of where cell values are communicated, as in Figure \ref{fig:domain_1d_1}.
 Moreover, there must be separate communications for the edges and vertices.
 
-However,
+On the other hand, Figure \ref{fig:domain_1d_2} demonstrates how using the intermediate update step makes the code more interpretable,
+and thus maintainable and easier to debug (and develop into the 2D topology).
+In this method, the communication can be done in just two MPI statements:
 
-domain decomposition how it works
-1d decomposition, how the single thread development helped give a clean solution
-2d decomposition, creating a Cartesian grid
+\begin{lstlisting}
+// Cycle edges
+MPI_Sendrecv_replace(top_edge, N_COLS_TOTAL + 2, MPI_INT, rank_down, 42, rank_up, 42, MPI_COMM_WORLD, &status);
+MPI_Sendrecv_replace(bottom_edge, N_COLS_TOTAL + 2, MPI_INT, rank_up, 42, rank_down, 42, MPI_COMM_WORLD, &status);
+\end{lstlisting}
 
-OMP threading with parallel fors (collapsed), barriers,
+All ranks can store the top and bottom edge in buffers of the same name which are then simply cycled in the correct direction across adjacent ranks.
 
-Hybrid approach
+The approach for 2D domain decomposition was similar, with Figure \ref{fig:domain_2d} illustrating how this is made more elegant by updating each rank's halo first,
+and then cycling the corresponding edges and vertices of all the halos.
+The challenge for the 2D decomposition was to embed the ranks in a coordinate system such that each rank could communicate to its correct adjacent ranks,
+but the two-step approach also made this more manageable.
 
-Timing plots.
+\begin{figure}[hp]
+    \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=0.9\linewidth, height=6cm, center]{figures/domain_decomp_2d_1.png}
+    \caption{Required communication}
+    \label{fig:domain_2d_1}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=0.9\linewidth, height=6cm, center]{figures/domain_decomp_2d_2.png}
+    \caption{Two-step implementation}
+    \label{fig:domain_2d_2}
+    \end{subfigure}
+
+    \caption{Illustration of the communication between chunks in 2D topology.}
+    \label{fig:domain_2d}
+\end{figure}
+
+Once this worked for grids whose sizes were integer multiples of the topology sizes, it was extended to grids of any size.
+This involves allocating differently sized chunks for the ranks.
+In turn, if this is done properly then it does not affect the coherence communication of halos,
+since corresponding halo edges will still always have the same size.
+However, the scattering and gathering of the chunks at the start and end of the programme becomes more involved.
+The sizes of each chunk are stored in a 2D array, and then the partial sums or `offsets' are computed from this,
+which enables the use of the \texttt{MPI\_Scatterv} function to distribute across the differently sized buffers,
+and the same calculations are passed to the \texttt{MPI\_Gatherv} function at the end.
+
+The domain decomposition was then integrated with OpenMP functionality to employ threading within each rank.
+This consisted of enabling the convolution, rule evaluation, and periodic boundary update to be performed by mutliple threads sharing the relevant array.
+For this purpose, statements such as \texttt{\#pragma omp parallel for collapse(2)} were used to distribute the serial routines,
+which mostly consisted of for loops, amongst the threads (with texttt{collapse(2)} implementing this for nested for loops).
+Additionally, the setting of shared memory required the use of \texttt{\#pragma omp barrier} statements.
+For instance, for the separable convolution algorithm, this was important because all entries of the intermediate row-convolved matrix are required to accurately perform the column convolution.
+The barrier prevented idle threads from starting the column convolution iterations until the row convolution was complete.
+
+\begin{figure}[hp]
+    \includegraphics[scale=0.65, center]{figures/time_simulation.png}
+    \caption{Timing plot for single thread code}
+    \label{fig:time_r4}
+\end{figure}
+
+Once the hybrid parallel program was written and verified, it could be investigated via timing scripts and compared with the single-thread algorithm.
+
+
+
+\begin{figure}[hp]
+    \includegraphics[scale=0.65, center]{figures/time_hybrid_r4_plot.png}
+    \caption{Timing plot for 2x2 domain decomposition}
+    \label{fig:time_r4}
+\end{figure}
+
+\begin{figure}[hp]
+    \includegraphics[scale=0.65, center]{figures/time_hybrid_r9_plot.png}
+    \caption{Timing plot for 3x3 domain decomposition}
+    \label{fig:time_r9}
+\end{figure}
+
+\begin{figure}[hp]
+    \includegraphics[scale=0.65, center]{figures/time_hybrid_r16_plot.png}
+    \caption{Timing plot for 4x4 domain decomposition}
+    \label{fig:time_r16}
+\end{figure}
+
+\begin{figure}[hp]
+    \includegraphics[scale=0.65, center]{figures/time_hybrid_r25_plot.png}
+    \caption{Timing plot for 5x5 domain decomposition}
+    \label{fig:time_r25}
+\end{figure}
+
+\begin{figure}[hp]
+    \includegraphics[scale=0.65, center]{figures/time_hybrid_r36_plot.png}
+    \caption{Timing plot for 6x6 domain decomposition}
+    \label{fig:time_r36}
+\end{figure}
+
+\begin{figure}[hp]
+    \includegraphics[scale=0.65, center]{figures/time_hybrid_r49_plot.png}
+    \caption{Timing plot for 7x7 domain decomposition}
+    \label{fig:time_r49}
+\end{figure}
+
 
 \section*{Summary}
 

@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
         file.open(output_filename);
     }
 
-    for (int world_size = 100; world_size <= 4000; world_size += 100) {
+    for (int world_size = 1000; world_size <= 10000; world_size += 1000) {
 
         int n_rows_total = world_size;
         int n_cols_total = world_size;
