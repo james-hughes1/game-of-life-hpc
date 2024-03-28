@@ -353,7 +353,6 @@ MPI_Sendrecv_replace(bottom_edge, N_COLS_TOTAL + 2, MPI_INT, rank_up, 42, rank_d
 \end{lstlisting}
 
 All ranks can store the top and bottom edge in buffers of the same name which are then simply cycled in the correct direction across adjacent ranks.
-
 The approach for 2D domain decomposition was similar, with Figure \ref{fig:domain_2d} illustrating how this is made more elegant by updating each rank's halo first,
 and then cycling the corresponding edges and vertices of all the halos.
 The challenge for the 2D decomposition was to embed the ranks in a coordinate system such that each rank could communicate to its correct adjacent ranks,
@@ -395,12 +394,18 @@ The barrier prevented idle threads from starting the column convolution iteratio
 \begin{figure}[hp]
     \includegraphics[scale=0.65, center]{figures/time_simulation.png}
     \caption{Timing plot for single thread code}
-    \label{fig:time_r4}
+    \label{fig:time_single}
 \end{figure}
 
 Once the hybrid parallel program was written and verified, it could be investigated via timing scripts and compared with the single-thread algorithm.
-
-
+This was carried out using Tier 2 services on the CSD3 computing clusters.
+All timing scripts were performed on a single Cascade Lake node, each of which has 56 cores,
+enabling various configurations of domain decomposition and threading to be investigated.
+This was controlled via the configuration of the SLURM submission script (found in the root of the repository),
+in which the \texttt{ntasks} parameter controlled the number of MPI ranks used,
+while the \texttt{cpus-per-rank} parameter configured the number of OpenMP threads assigned to each rank;
+moreover these were assigned efficiently by setting the environment variable \texttt{export I\_MPI\_PIN\_DOMAIN=omp:compact} which ensured that the threads assigned to each MPI process were in close proximity,
+thus reducing the communication overhead.
 
 \begin{figure}[hp]
     \includegraphics[scale=0.65, center]{figures/time_hybrid_r4_plot.png}
@@ -413,6 +418,32 @@ Once the hybrid parallel program was written and verified, it could be investiga
     \caption{Timing plot for 3x3 domain decomposition}
     \label{fig:time_r9}
 \end{figure}
+
+For comparison, Figure \ref{fig:time_single} shows how the time taken to simulate 200 ticks scaled with the number of rows of a square simulation,
+for the single-threaded implementation of the code.
+This plot shows the expected trend of time taken increasing as $O(n^2)$ with respect to the simulation size $n$.
+Moreover, note that for small simulations the time taken appears to be very small with respect to the scale of the timing for the full experiment.
+This is unlike the situation for the parallelised program.
+All subsequent timing experiments were done with the same maximum simulation age 200, as well as the same progression of simulation size.
+Moreover, the investigation of domain decompositions was limited to square layouts.
+
+When inspecting Figure \ref{fig:time_r4}, we see an enormous increase in the time taken for the smallest 1000 by 1000 simulation for four single threaded MPI ranks.
+The time taken increases from 2 to 33 seconds.
+This represents the increase in `fixed' computational cost caused by the collective communication,
+especially at the start and end of the simulation to distribute and recollect the simulation chunks across the ranks.
+However, we continue to observe an apparent $O(n^2)$ scaling law of the time taken with respect to the simulation size.
+Furthermore, in this implementation, the exact coefficient of this scaling law is considerably less than that of the single-threaded program,
+as evidence by the result for the largest simulation which is around 25\% faster than before.
+This indicates that the domain decomposition has successfully increased the performance of the parts of the code that scale with respect to the size of the simulation.
+Distributing each MPI process across multiple threads causes further improvements,
+with speed-ups of roughly 38\%, 60\%, and 66\% for 2, 4, and 8 threads per rank respectively on the largest simulation,
+though this indicates diminshing returns as the number of threads per rank increases.
+
+As the number of ranks increases this trend continues with greater communicated overhead apparent in the smaller simulations,
+but smaller scaling coefficients as the simulation grows in size.
+For large numbers of ranks the fixed computational cost becomes dominant in the experiments,
+with topologies of 5x5 and beyond taking longer to compute the smallest simulations than the single-thread algorithm takes to compute the largest simulation.
+This shows that in practice, the parallelisation parameters must be matched to the problem size; these topologies will likely become optimal for much larger simulations.
 
 \begin{figure}[hp]
     \includegraphics[scale=0.65, center]{figures/time_hybrid_r16_plot.png}
@@ -441,9 +472,22 @@ Once the hybrid parallel program was written and verified, it could be investiga
 
 \section*{Summary}
 
-Learnings: CSD3, C++, previous C1 things that were useful (e.g. versioning, branches)
-What went to plan and what didn't:
-How you could extend: refactoring of the code, niche things like avoiding cache resonance and automatically finding a topology; integrating 1d and 2d decomp.
+This project was an incredibly useful exercise in learning how to use the CSD3 compute resources,
+which comes with its own set of challenges such as setting up the correct module environment,
+configuring SLURM submission scripts correctly,
+and also time management to ensure productivity is maintained in the context of the job queuing system.
+
+Additionally, the focus on developing highly-optimised code required reviewing and practising the fundamentals of the C++ language,
+as well as the best practices studied in the C1 course.
+This was crucial in ensuring that the codebase remained manageable despite the complexity of the parallel code.
+
+There are aspects of the code that could be extended upon in the future.
+For instance, the single-thread, 1D, and 2D domain decomposition scripts could all be integrated to produce a single code that can run in any configuration specified at runtime.
+This would improve the performance compared to using the 2D decomposition for 1 by m chunk layouts,
+since the 1D implementation invokes far less fixed cost in the form of setting up the Cartesian grid of chunks.
+Additionally, a routine could be added to automatically find a suitable chunk topology given the raw number of mpi ranks and the size of the simulation.
+Similarly, the possibility of cache resonance in Table \ref{tab:sepconvtime} could be investigated further,
+and a feature could be added to automatically pad the simulation with redundant cells when such problematic simulation sizes are used.
 
 \bibliographystyle{IEEEtran}
 \bibliography{Biblio}
